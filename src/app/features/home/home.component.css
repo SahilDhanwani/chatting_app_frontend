@@ -1,0 +1,89 @@
+/* Overall container */
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Content block */
+  .content {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Heading and Paragraph */
+  h1 {
+    color: #fff;
+    font-size: 2.8em;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    color: #f0f0f0;
+    font-size: 1.2em;
+    margin-bottom: 30px;
+  }
+  
+  /* Button styles */
+  .button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .btn {
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background: #ff7b54;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn:hover {
+    background: #ff5722;
+    transform: scale(1.1);
+  }
+  
+  .btn:active {
+    transform: scale(0.95);
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.2em;
+    }
+  
+    p {
+      font-size: 1em;
+    }
+  
+    .btn {
+      font-size: 0.9em;
+      padding: 10px 20px;
+    }
+  }
+  

@@ -1,21 +1,23 @@
+// src/app/features/home/home.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  standalone: true,
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
+
 export class HomeComponent {
   constructor(private router: Router) { }
 
-  navigateToLogin() {
-    this.router.navigate(['/auth/login']); // Adjust route path based on your setup
+  onLoginClick() {
+    this.router.navigate(['/auth/login']);
   }
 
-  navigateToSignup() {
-    this.router.navigate(['/auth/signup']); // Adjust route path based on your setup
+  onSignupClick() {
+    // Logic for routing or opening signup modal
+    console.log('Sign Up clicked');
   }
 }
-

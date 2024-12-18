@@ -1,0 +1,31 @@
+<!-- src/app/features/login/login.component.html -->
+<div class="login-container">
+    <h2>Login to ChatApp</h2>
+
+    <form class="login-form" (ngSubmit)="onLoginSubmit()" #loginForm="ngForm">
+
+        <div class="input-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" [(ngModel)]="username" required #usernameInput="ngModel"
+                placeholder="Enter username or email"
+                [class.invalid]="usernameInput.invalid && usernameInput.touched" />
+            <div class="error-message" *ngIf="usernameInput.invalid && usernameInput.touched">
+                Please enter a valid username or email.
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" [(ngModel)]="password" required
+                #passwordInput="ngModel" placeholder="Enter your password"
+                [class.invalid]="passwordInput.invalid && passwordInput.touched" />
+            <div class="error-message" *ngIf="passwordInput.invalid && passwordInput.touched">
+                Please enter your password.
+            </div>
+        </div>
+
+        <button class="login-btn" type="submit" [disabled]="loginForm.invalid">Login</button>
+    </form>
+
+    <p class="signup-link">Don't have an account? <a routerLink="/signup">Sign up here</a></p>
+</div>

@@ -1,10 +1,12 @@
+<!-- src/app/features/home/home.component.html -->
 <div class="home-container">
-    <div class="content">
+    <div class="welcome-text">
         <h1>Welcome to ChatApp</h1>
-        <p>Connect and chat with your friends, anytime, anywhere.</p>
-        <div class="button-group">
-            <button class="btn" (click)="navigateToLogin()">Login</button>
-            <button class="btn" (click)="navigateToSignup()">Sign Up</button>
-        </div>
+        <p>Your chat experience starts here.</p>
+    </div>
+
+    <div class="buttons-container">
+        <button class="login-btn" (click)="onLoginClick()">Login</button>
+        <button class="signup-btn" (click)="onSignupClick()">Sign Up</button>
     </div>
 </div>

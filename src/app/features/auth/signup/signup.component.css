@@ -1,0 +1,113 @@
+/* src/app/features/auth/signup/signup.component.css */
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #6a11cb, #2575fc);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 1s ease-out;
+}
+
+h2 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.input-group {
+    text-align: left;
+    width: 100%;
+}
+
+label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1em;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #00BFFF;
+    /* Light Blue Color */
+}
+
+input.invalid {
+    border-color: red;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.error-message {
+    font-size: 1.1em;
+    color: red;
+    margin-top: 5px;
+}
+
+button.signup-btn {
+    padding: 15px;
+    font-size: 1.1em;
+    background-color: #f8b400;
+    color: white;
+    border: 2px solid #f8b400;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 100%;
+}
+
+button.signup-btn:hover {
+    background-color: white;
+    color: #f8b400;
+    transform: scale(1.05);
+}
+
+button.signup-btn:active {
+    transform: scale(1.02);
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+.login-link a {
+    color: #f8b400;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

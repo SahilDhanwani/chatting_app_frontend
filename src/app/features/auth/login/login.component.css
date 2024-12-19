@@ -1,5 +1,4 @@
 /* src/app/features/login/login.component.css */
-
 .login-container {
   display: flex;
   flex-direction: column;
@@ -30,54 +29,53 @@ h2 {
 .input-group {
   text-align: left;
   width: 100%;
+}
 
-  label {
-      font-size: 1.2em;
-      font-weight: 500;
-      color: #ecebde; /* Light but clear color for better contrast */
-      margin-bottom: 5px;
-      display: block;
-      transition: color 0.3s ease;
-  }
+label {
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #ecebde; /* Light but clear color for better contrast */
+  margin-bottom: 5px;
+  display: block;
+}
 
-  label.error-label {
-      color: #ffcc80; /* Soft amber for error labels */
-  }
+label.error-label {
+  color: #ffcc80; /* Soft amber for error labels */
+}
 
-  input {
-      width: 100%;
-      padding: 15px;
-      font-size: 1em;
-      border-radius: 10px;
-      border: 2px solid #ddd; /* Neutral border for better focus */
-      background-color: #f8fafc; /* Light background for better visibility */
-      color: #333; /* Darker input text for readability */
-      outline: none;
-      transition: all 0.3s ease;
-  }
+input {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1em;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background-color: #f8fafc; /* Light background for better visibility */
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
 
-  input:focus {
-      border-color: #f8b400; /* Highlight border on focus */
-      background-color: #ffffff;
-      color: black;
-  }
+input:focus {
+  border-color: #f8b400; /* Highlight border on focus */
+  background-color: #ffffff;
+  color: black;
+}
 
-  input.invalid {
-      border-color: #ffcc80; /* Amber border for errors */
-      background-color: rgb(255, 204, 128); /* Subtle background hint */
-  }
+input.invalid {
+  border-color: #ffcc80; /* Amber border for errors */
+  background-color: rgb(255, 204, 128); /* Subtle background hint */
+}
 
-  input.invalid + .error-message {
-      color: #ffcc80; /* Amber error message */
-      display: block;
-  }
+input.invalid + .error-message {
+  color: #ffcc80; /* Amber error message */
+  display: block;
+}
 
-  .error-message {
-      font-size: 1.2em;
-      color: #ffcc80; /* Consistent amber tone */
-      margin-top: 5px;
-      display: none; /* Hidden by default until an error is triggered */
-  }
+.error-message {
+  font-size: 1.1em;
+  color: #ffcc80; /* Consistent amber tone */
+  margin-top: 5px;
+  display: none; /* Hidden by default until an error is triggered */
 }
 
 button.login-btn {
@@ -90,21 +88,21 @@ button.login-btn {
   cursor: pointer;
   transition: transform 0.3s ease;
   width: 100%;
+}
 
-  &:hover {
-      background-color: white;
-      color: #f8b400;
-      transform: scale(1.05);
-  }
+button.login-btn:hover {
+  background-color: white;
+  color: #f8b400;
+  transform: scale(1.05);
+}
 
-  &:active {
-      transform: scale(1.02);
-  }
+button.login-btn:active {
+  transform: scale(1.02);
+}
 
-  &:disabled {
-      background-color: #dcdcdc;
-      cursor: not-allowed;
-  }
+button.login-btn:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
 }
 
 .signup-link {
@@ -119,15 +117,14 @@ button.login-btn {
 
 .signup-link a:hover {
   text-decoration: underline;
-  cursor: pointer;
 }
 
 /* Animations */
 @keyframes fadeIn {
   0% {
-      opacity: 0;
+    opacity: 0;
   }
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }

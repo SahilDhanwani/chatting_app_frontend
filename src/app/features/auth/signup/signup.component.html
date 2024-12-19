@@ -1,1 +1,59 @@
-<p>signup works!</p>
+<!-- src/app/features/login/login.component.html -->
+<div class="signup-container">
+    <h2>Sign Up</h2>
+
+    <form (ngSubmit)="onSignupSubmit()" class="signup-form" #signupForm="ngForm">
+
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" [(ngModel)]="username" required #usernameInput="ngModel"
+                placeholder="Enter your username" [class.invalid]="usernameInput.invalid" />
+            <div class="error-message" *ngIf="usernameInput.invalid">
+                Please enter a valid username.
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" [(ngModel)]="email" required #emailInput="ngModel"
+                placeholder="Enter your email" [class.invalid]="emailInput.invalid" />
+            <div class="error-message" *ngIf="emailInput.invalid">
+                Please enter a valid email.
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" [(ngModel)]="password" required
+                #passwordInput="ngModel" placeholder="Enter your password" [class.invalid]="passwordInput.invalid" />
+            <div class="error-message" *ngIf="passwordInput.invalid">
+                Please enter a valid password.
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required
+                #confirmPasswordInput="ngModel" placeholder="Confirm your password"
+                [class.invalid]="confirmPasswordInput.invalid" />
+            <div class="error-message" *ngIf="confirmPasswordInput.invalid">
+                Please confirm your password.
+            </div>
+        </div>
+
+
+        <!-- Error Message -->
+        <div *ngIf="signupError" class="error-message">
+            {{ signupError }}
+        </div>
+
+        <!-- Password mismatch error -->
+        <div *ngIf="!isPasswordMatching" class="error-message">
+            Passwords do not match.
+        </div>
+
+        <button type="submit" class="signup-btn" [disabled]="signupForm.invalid">Sign Up</button>
+    </form>
+
+    <p class="login-link">Already have an account? <a routerLink="/auth/login">Login here</a></p>
+</div>

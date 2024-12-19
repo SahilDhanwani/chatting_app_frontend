@@ -1,29 +1,31 @@
-// src/app/features/login/login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
+  standalone: true, // Makes the component standalone
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule], // Import RouterModule here
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  loginError: string = ''; // Variable to store error messages
 
   constructor(private router: Router) { }
 
   onLoginSubmit() {
-    // You can add your login logic here (e.g., calling an API to validate credentials)
+    // Basic login logic (you can replace this with an actual API call)
     if (this.username === 'sahildhanwani291203@gmail.com' && this.password === '1234') {
-      // Navigate to home page after successful login
-      this.router.navigate(['']);
+      // Navigate to the home page (or any protected route after successful login)
+      this.router.navigate(['/']); // Navigate to the home page
     } else {
-      // Handle incorrect credentials (can show a message or error)
-      alert('Invalid credentials. Please try again.');
+      // Display an error message if credentials are incorrect
+      this.loginError = 'Invalid credentials. Please try again.';
     }
   }
 }

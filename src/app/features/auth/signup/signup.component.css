@@ -4,12 +4,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #6a11cb, #2575fc);
     color: white;
     text-align: center;
     padding: 20px;
     animation: fadeIn 1s ease-out;
+    
 }
 
 h2 {
@@ -51,17 +52,22 @@ input {
 
 input::placeholder {
     color: #00BFFF;
-    /* Light Blue Color */
+}
+
+input:focus {
+    border-color: #f8b400;
+    background-color: #ffffff;
+    color: black;
 }
 
 input.invalid {
-    border-color: red;
-    background-color: rgba(255, 0, 0, 0.1);
+    border-color: #f8b400;
+    background-color: #ffffff;
 }
 
 .error-message {
     font-size: 1.1em;
-    color: red;
+    color: #f8b400;
     margin-top: 5px;
 }
 
@@ -81,10 +87,6 @@ button.signup-btn:hover {
     background-color: white;
     color: #f8b400;
     transform: scale(1.05);
-}
-
-button.signup-btn:active {
-    transform: scale(1.02);
 }
 
 .login-link {

@@ -17,11 +17,13 @@ export class SignupComponent {
   password: string = '';
   confirmPassword: string = '';
   signupError: string = ''; // To store error messages
+  signUpClicked: boolean = false;
   isPasswordMatching: boolean = true; // To track if passwords match
 
   constructor(private router: Router) {}
 
   onSignupSubmit() {
+    this.signUpClicked = true;
     if (this.password !== this.confirmPassword) {
       this.isPasswordMatching = false;
       this.signupError = 'Passwords do not match!';

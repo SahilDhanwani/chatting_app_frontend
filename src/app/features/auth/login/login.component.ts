@@ -14,12 +14,14 @@ import { RouterModule } from '@angular/router';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  loginClicked: boolean = false;
   loginError: string = ''; // Variable to store error messages
 
   constructor(private router: Router) { }
 
   onLoginSubmit() {
-    console.log('Username:', this.username);
+    this.loginClicked = true;
+
     // Basic login logic (you can replace this with an actual API call)
     if (this.username === 'sahildhanwani291203@gmail.com' && this.password === '1234') {
       // Navigate to the home page (or any protected route after successful login)

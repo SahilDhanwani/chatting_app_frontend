@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Import RouterModule
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @Component({
-  standalone: true,  // Makes the component standalone
+  standalone: true,
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  imports: [FormsModule, CommonModule, RouterModule], // Import RouterModule
+  imports: [FormsModule, CommonModule, RouterModule, HttpClientModule],
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
@@ -20,7 +22,7 @@ export class SignupComponent {
   signUpClicked: boolean = false;
   isPasswordMatching: boolean = true; // To track if passwords match
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
   onSignupSubmit() {
     this.signUpClicked = true;
@@ -30,13 +32,28 @@ export class SignupComponent {
       return;
     }
 
-    // You can replace this with actual registration logic (e.g., API call)
-    // For now, just simulate successful registration
     if (this.username && this.email && this.password) {
-      // Navigate to the login page after successful signup
-      this.router.navigate(['/auth/login']);
-    } else {
-      // Do nothing
+
+      const user = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      }
+
+      this.http.post('https://c24a-110-227-19-99.ngrok-free.app/api/auth/signup', user).subscribe(
+        (response) => {
+          if (response) {
+            alert('User created successfully! Please login to continue.');
+            this.router.navigate(['/auth/login']);
+          }
+          else {
+            alert('Username or Email already exists! Please try again.');
+          }
+          
+        }, (error) => {
+          console.log(error);
+          this.signupError = error.error.message;
+        });
     }
   }
 }

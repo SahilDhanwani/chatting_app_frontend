@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   standalone: true, // Makes the component standalone
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [FormsModule, CommonModule, RouterModule], // Import RouterModule here
+  imports: [FormsModule, CommonModule, RouterModule, HttpClientModule], // Import RouterModule here
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
@@ -17,18 +18,34 @@ export class LoginComponent {
   loginClicked: boolean = false;
   loginError: string = ''; // Variable to store error messages
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
   onLoginSubmit() {
     this.loginClicked = true;
 
-    // Basic login logic (you can replace this with an actual API call)
-    if (this.username === 'sahildhanwani291203@gmail.com' && this.password === '1234') {
-      // Navigate to the home page (or any protected route after successful login)
-      this.router.navigate(['/']); // Navigate to the home page
-    } else {
-      // Display an error message if credentials are incorrect
-      this.loginError = 'Invalid credentials. Please try again.';
+    if (this.username && this.password) {
+
+      const user = {
+        username: this.username,
+        email: this.username,
+        password: this.password,
+      }
+
+      this.http.post('https://c24a-110-227-19-99.ngrok-free.app/api/auth/login', user).subscribe(
+        (response) => {
+          if (response) {
+            this.router.navigate(['/']);
+          }
+          else {
+            alert('Invalid username or password! Please try again.');
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.loginError = error.error.message;
+
+        }
+      )
     }
   }
 }

@@ -17,7 +17,6 @@ export class HomeComponent {
   }
 
   onSignupClick() {
-    // Logic for routing or opening signup modal
-    console.log('Sign Up clicked');
+    this.router.navigate(['/auth/signup']);
   }
 }

@@ -1,0 +1,21 @@
+<div class="chat-screen">
+    <div class="header">
+        <button class="back-button" (click)="goBack()">Back</button>
+        <div class="header-info">
+            <img [src]="selectedUser.profilePicture" alt="Profile Picture" class="header-avatar">
+            <p class="header-username">{{ selectedUser.username }}</p>
+        </div>
+    </div>
+
+    <div class="message-container" #messageContainer>
+        <div *ngFor="let message of messages"
+            [ngClass]="{ 'sent': message.sentBy === 'me', 'received': message.sentBy !== 'me' }" class="message">
+            <p>{{ message.content }}</p>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <input [(ngModel)]="messageInput" (keyup.enter)="sendMessage()" placeholder="Type a message...">
+        <button (click)="sendMessage()">Send</button>
+    </div>
+</div>

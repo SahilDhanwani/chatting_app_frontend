@@ -1,0 +1,148 @@
+/* src/app/features/chat/chat-list/chat-list.component.css */
+.chat-list {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background: linear-gradient(to bottom, #6a11cb, #2575fc);
+    color: white;
+    min-height: 100vh;
+    animation: fadeIn 1s ease-out;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 0;
+    border-bottom: 2px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-list-header h2 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.chat-list-header .new-message-btn {
+    background-color: #f8b400;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    color: white;
+    border: 2px solid #f8b400;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-sizing: border-box;
+}
+
+.chat-list-header .new-message-btn:hover {
+    background-color: white;
+    color: #f8b400;
+    transform: scale(1.05);
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.02);
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    overflow: hidden;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    margin: 0;
+}
+
+.last-message {
+    color: #ddd;
+    font-size: 14px;
+    margin-top: 5px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .chat-list-header {
+        padding: 10px 0;
+    }
+
+    .chat-list-header h2 {
+        font-size: 1.5em;
+    }
+
+    .chat-item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .new-message-btn {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+
+    .user-name {
+        font-size: 16px;
+    }
+
+    .last-message {
+        font-size: 12px;
+    }
+}

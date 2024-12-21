@@ -1,0 +1,16 @@
+<div class="chat-list">
+    <div class="chat-list-header">
+        <h2>Chats</h2>
+        <button class="new-message-btn">New Message</button>
+    </div>
+    
+    <div *ngFor="let user of users" class="chat-item" (click)="openChat(user)">
+        <div class="avatar">
+            <img src="path-to-avatar-image.jpg" alt="User Avatar">
+        </div>
+        <div class="chat-info">
+            <p class="user-name">{{ user.username }}</p>
+            <p class="last-message">{{ user.lastMessage }}</p>
+        </div>
+    </div>
+</div>

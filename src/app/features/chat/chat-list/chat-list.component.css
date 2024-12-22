@@ -1,35 +1,43 @@
+/* Main container for the chat list */
 .chat-list {
     display: flex;
     flex-direction: column;
     padding: 15px;
-    background: linear-gradient(to bottom, #2b5876, #4e4376); /* Darker gradient for a premium feel */
+    background: linear-gradient(to bottom, #2b5876, #4e4376);
+    /* Darker gradient for a premium feel */
     color: white;
     min-height: 100vh;
     animation: fadeIn 1s ease-out;
     max-width: 100%;
     box-sizing: border-box;
-    overflow-y: auto; /* Enable scroll for long lists */
+    overflow-y: auto;
+    /* Enable scroll for long lists */
 }
 
+/* Header section with title and new message button */
 .chat-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    /* Subtle border */
     width: 100%;
     box-sizing: border-box;
 }
 
+/* Title styling */
 .chat-list-header h2 {
     font-size: 1.8em;
     font-weight: 700;
     color: white;
     margin: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); /* Adds depth to the text */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    /* Adds depth to the text */
 }
 
+/* New message button styling */
 .chat-list-header .new-message-btn {
     background-color: #ff9f1c;
     padding: 12px 20px;
@@ -39,40 +47,49 @@
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
+/* Hover effect for the new message button */
 .chat-list-header .new-message-btn:hover {
     background-color: #ffd400;
     color: #4e4376;
     transform: scale(1.1);
 }
 
+/* Chat item container */
 .chat-item {
     display: flex;
     align-items: center;
     padding: 15px;
     border-radius: 12px;
     margin-bottom: 10px;
-    background: rgba(255, 255, 255, 0.1); /* Subtle background for items */
+    background: rgba(255, 255, 255, 0.1);
+    /* Subtle background for items */
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Light shadow for depth */
 }
 
+/* Hover effect for chat item */
 .chat-item:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Enhanced shadow on hover */
 }
 
+/* Avatar styling */
 .avatar {
     width: 60px;
     height: 60px;
     margin-right: 15px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.2); /* Elegant border */
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    /* Elegant border */
     transition: transform 0.3s ease;
 }
 
@@ -82,23 +99,28 @@
     object-fit: cover;
 }
 
+/* Chat information container */
 .chat-info {
-    display: flex;   
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
+/* Username styling */
 .user-name {
     font-weight: bold;
     font-size: 18px;
     color: white;
     margin: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); /* Adds depth */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    /* Adds depth */
 }
 
+/* Last message preview styling */
 .last-message {
     margin: 0;
-    color: rgba(255, 255, 255, 0.6); /* Lighter text for message preview */
+    color: rgba(255, 255, 255, 0.6);
+    /* Lighter text for message preview */
     font-size: 14px;
     font-style: italic;
 }
@@ -108,38 +130,156 @@
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-    .chat-list-header h2 {
-        font-size: 1.5em;
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    /* Darker semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Content Area of the Modal */
+.modal-content {
+    background: linear-gradient(to bottom, #6a11cb, #2575fc);
+    /* Gradient background */
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    /* Darker shadow for depth */
+    animation: slideIn 0.3s ease-out;
+    box-sizing: border-box;
+    max-height: 80vh;
+    /* Set maximum height of the modal to 80% of the viewport height */
+    overflow-y: auto;
+    /* Enable vertical scroll if content overflows */
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Close Button */
+.close-modal {
+    background: transparent;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #f8b400;
+    /* Accent color */
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 20px 0;
+    font-size: 1.2em;
+    color: white;
+    text-align: center;
+}
+
+/* Search Bar */
+.search-bar {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.search-bar::placeholder {
+    color: #00BFFF;
+    /* Placeholder color */
+}
+
+.search-bar:focus {
+    border-color: #f8b400;
+    background-color: #ffffff;
+    color: black;
+}
+
+/* User List */
+.user-list {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 1.1em;
+    color: #ddd;
+}
+
+.user-item {
+    padding: 18px;
+    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.2);
+    /* Slightly translucent background */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.user-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    /* Lighter on hover */
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
 
-    .chat-item {
-        padding: 12px;
-        margin-bottom: 8px;
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
     }
 
-    .avatar {
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-    }
-
-    .user-name {
-        font-size: 16px;
-    }
-
-    .last-message {
-        font-size: 12px;
-    }
-
-    .new-message-btn {
-        font-size: 0.9em;
-        padding: 10px 15px;
+    to {
+        transform: translateY(0);
     }
 }

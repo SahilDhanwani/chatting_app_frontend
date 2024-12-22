@@ -34,7 +34,7 @@ export class LoginComponent {
       this.http.post('https://c24a-110-227-19-99.ngrok-free.app/api/auth/login', user).subscribe(
         (response) => {
           if (response) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/chatlist'], { state: { id: response } });
           }
           else {
             alert('Invalid username or password! Please try again.');

@@ -1,16 +1,35 @@
 <div class="chat-list">
+    <!-- Header for Chat List -->
     <div class="chat-list-header">
         <h2>Chats</h2>
-        <button class="new-message-btn">+ New Chat</button>
+        <button class="new-message-btn" (click)="openNewChat()">+ New Chat</button>
     </div>
-    
-    <div *ngFor="let user of users" class="chat-item" (click)="openChat(user)">
+
+    <!-- Display list of users for chat -->
+    <div *ngFor="let user of recentUsers" class="chat-item" (click)="openChat(user)">
         <div class="avatar">
-            <img src="https://c8.alamy.com/comp/W2R746/avatar-line-flat-style-vector-icon-user-sign-icon-human-avatar-black-icon-vector-illustration-W2R746.jpg" alt="User Avatar">
+            <img src="https://c8.alamy.com/comp/W2R746/avatar-line-flat-style-vector-icon-user-sign-icon-human-avatar-black-icon-vector-illustration-W2R746.jpg"
+                alt="User Avatar">
         </div>
         <div class="chat-info">
             <p class="user-name">{{ user.username }}</p>
             <p class="last-message">{{ user.lastMessage }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- New Chat Modal -->
+<div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Select a User to Chat</h2>
+            <button (click)="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <input type="text" [(ngModel)]="searchText" placeholder="Search for a user..." class="search-bar">
+            <div *ngFor="let username of filteredUsers()" class="user-item" (click)="selectUser(username)">
+                <p>{{ username }}</p>
+            </div>
         </div>
     </div>
 </div>

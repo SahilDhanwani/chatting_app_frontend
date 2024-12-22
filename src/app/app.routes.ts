@@ -7,6 +7,7 @@ import { ChatScreenComponent } from './features/chat/chat-screen/chat-screen.com
 
 export const routes: Routes = [
     { path: '', component: ChatListComponent }, // Default route (Home Page)
+    { path: 'home', component: HomeComponent },
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/signup', component: SignupComponent },
     { path: 'chatlist', component: ChatListComponent },

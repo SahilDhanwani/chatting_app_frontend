@@ -5,12 +5,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #6a11cb, #2575fc); /* Same gradient as login page */
     color: white;
     text-align: center;
     padding: 20px;
     animation: fadeIn 1s ease-out;
+    box-sizing: border-box;
 }
 
 .welcome-text {

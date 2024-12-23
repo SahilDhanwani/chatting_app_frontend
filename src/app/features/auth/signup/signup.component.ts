@@ -40,7 +40,7 @@ export class SignupComponent {
         password: this.password,
       }
 
-      this.http.post('https://c24a-110-227-19-99.ngrok-free.app/api/auth/signup', user).subscribe(
+      this.http.post('http://localhost:8080/api/auth/signup', user).subscribe(
         (response) => {
           if (response) {
             alert('User created successfully! Please login to continue.');
@@ -49,7 +49,7 @@ export class SignupComponent {
           else {
             alert('Username or Email already exists! Please try again.');
           }
-          
+
         }, (error) => {
           console.log(error);
           this.signupError = error.error.message;

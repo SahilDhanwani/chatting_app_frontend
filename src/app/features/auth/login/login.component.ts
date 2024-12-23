@@ -31,10 +31,10 @@ export class LoginComponent {
         password: this.password,
       }
 
-      this.http.post('https://c24a-110-227-19-99.ngrok-free.app/api/auth/login', user).subscribe(
+      this.http.post('http://localhost:8080/api/auth/login', user).subscribe(
         (response) => {
           if (response) {
-            this.router.navigate(['/chatlist'], { state: { id: response } });
+            this.router.navigate(['/chatlist'], { state: { username: this.getuserName(response) } });
           }
           else {
             alert('Invalid username or password! Please try again.');
@@ -47,5 +47,14 @@ export class LoginComponent {
         }
       )
     }
+  }
+
+  getuserName(id: any) {
+    this.http.get<{ username: string }>(`http://localhost:8080/api/getUsername?id=${id}`,).subscribe(
+      (response) => {
+        this.username = response.username;
+      },
+    );
+    return this.username;
   }
 }

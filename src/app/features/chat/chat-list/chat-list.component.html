@@ -6,14 +6,14 @@
     </div>
 
     <!-- Display list of users for chat -->
-    <div *ngFor="let user of recentUsers" class="chat-item" (click)="openChat(user)">
+    <div *ngFor="let chat of ActiveChats" class="chat-item" (click)="openChat(chat[0])">
         <div class="avatar">
             <img src="https://c8.alamy.com/comp/W2R746/avatar-line-flat-style-vector-icon-user-sign-icon-human-avatar-black-icon-vector-illustration-W2R746.jpg"
                 alt="User Avatar">
         </div>
         <div class="chat-info">
-            <p class="user-name">{{ user.username }}</p>
-            <p class="last-message">{{ user.lastMessage }}</p>
+            <p class="user-name">{{ chat[0] }}</p>
+            <p class="last-message">{{ chat[1] }}</p>
         </div>
     </div>
 </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-body">
             <input type="text" [(ngModel)]="searchText" placeholder="Search for a user..." class="search-bar">
-            <div *ngFor="let username of filteredUsers()" class="user-item" (click)="selectUser(username)">
+            <div *ngFor="let username of filteredUsers()" class="user-item" (click)="openChat(username)">
                 <p>{{ username }}</p>
             </div>
         </div>

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-chat-screen',
@@ -13,41 +14,40 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class ChatScreenComponent implements OnInit {
   curr_username: any;
   messageInput: string = '';
+  curr_user_id: any;
+  other_user_id: any;
   other_username: any;
   messages: any[] = [];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const state = window.history.state;
     this.curr_username = state.curr_username;
     this.other_username = state.other_username;
 
-    console.log('Current User: ', this.curr_username);
-    console.log('Other User: ', this.other_username);
+    this.curr_user_id = await this.getId(this.curr_username);
+    this.other_user_id = await this.getId(this.other_username);
 
-
-
-    console.log('http://localhost:8080/api/getId?username=${username} ' + this.getId(this.curr_username));
-
-    this.http.get(`http://localhost:8080/api/getMessages?user1=${this.getId(this.curr_username)}?user2=${this.getId(this.other_username)}`).subscribe(
+    this.http.get(
+      `http://localhost:8080/api/getMessages?user1=${this.curr_user_id}&user2=${this.other_user_id}`
+    ).subscribe(
       (response: any) => {
+        console.log('Messages:', response);
         this.messages = response;
       },
       (error) => {
-        // console.log(error);
+        console.error('Error fetching messages:', error);
       }
     );
   }
 
-  getId(username: any): number {
-    this.http.get(`http://localhost:8080/api/getId?username=${username}`).subscribe(
-      (response: any) => {
-        // console.log(response);
-        return response;
-      },
+  async getId(username: any): Promise<number> {
+    const response = await lastValueFrom(
+      this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`)
     );
-    return 0;
+    console.log('The response is as : ', response);
+    return response;
   }
 
   sendMessage() {

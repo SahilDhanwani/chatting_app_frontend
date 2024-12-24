@@ -2,7 +2,7 @@
     <div class="header">
         <button class="back-button" (click)="goBack()">&#8592;</button>
         <div class="header-info">
-            <img src="https://c8.alamy.com/comp/W2R746/avatar-line-flat-style-vector-icon-user-sign-icon-human-avatar-black-icon-vector-illustration-W2R746.jpg"
+            <img src="https://img.freepik.com/free-vector/young-prince-vector-illustration_1308-174367.jpg"
                 alt="Profile Picture" class="header-avatar" />
             <p class="header-username">{{ other_username }}</p>
         </div>
@@ -10,8 +10,9 @@
 
     <div class="message-container" #messageContainer>
         <div *ngFor="let message of messages"
-            [ngClass]="{ 'sent': message.sentBy === 'me', 'received': message.sentBy !== 'me' }" class="message">
-            {{ message.content }}
+            [ngClass]="{ 'sent': message[1] === curr_user_id, 'received': message[1] !== curr_user_id }"
+            class="message">
+            {{ message[0] }}
         </div>
     </div>
 

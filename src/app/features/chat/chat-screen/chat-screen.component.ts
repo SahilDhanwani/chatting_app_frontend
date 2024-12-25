@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',
   imports: [FormsModule, CommonModule, HttpClientModule],
   styleUrls: ['./chat-screen.component.css'],
 })
+
 export class ChatScreenComponent implements OnInit {
   curr_username: any;
   messageInput: string = '';
@@ -52,10 +52,7 @@ export class ChatScreenComponent implements OnInit {
 
   sendMessage() {
     if (this.messageInput.trim()) {
-      this.messages.push({
-        content: this.messageInput,
-        sentBy: 'me',
-      });
+      this.messages.push([this.messageInput, this.curr_user_id]);
       this.messageInput = '';
     }
   }

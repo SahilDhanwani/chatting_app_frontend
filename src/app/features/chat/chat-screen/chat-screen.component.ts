@@ -33,7 +33,6 @@ export class ChatScreenComponent implements OnInit {
       `http://localhost:8080/api/getMessages?user1=${this.curr_user_id}&user2=${this.other_user_id}`
     ).subscribe(
       (response: any) => {
-        console.log('Messages:', response);
         this.messages = response;
       },
       (error) => {

@@ -6,7 +6,7 @@ import { ChatListComponent } from './features/chat/chat-list/chat-list.component
 import { ChatScreenComponent } from './features/chat/chat-screen/chat-screen.component';
 
 export const routes: Routes = [
-    { path: '', component: ChatListComponent }, // Default route (Home Page)
+    { path: '', component: HomeComponent }, // Default route (Home Page)
     { path: 'home', component: HomeComponent },
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/signup', component: SignupComponent },

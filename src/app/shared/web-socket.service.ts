@@ -1,41 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Client, Message } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 export class WebSocketService {
-  private socket: WebSocket;
-  private messageSubject: Subject<any> = new Subject<any>();
+  private client: Client;
+  private messageSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor() {
-    // Initialize WebSocket connection
-    this.socket = new WebSocket('ws://localhost:8080/chat'); // Make sure this URL matches your backend WebSocket URL
+    // Initialize Stomp Client with SockJS
+    this.client = new Client({
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws/chat'),
+      reconnectDelay: 5000, // Automatically reconnect on failure
+    });
 
-    // Handle incoming messages
-    this.socket.onmessage = (event) => {
-      this.messageSubject.next(event.data);
-    };
-
-    // Handle WebSocket connection open
-    this.socket.onopen = () => {
+    // Handle connection established
+    this.client.onConnect = () => {
       console.log('WebSocket connection established');
+      this.client.subscribe('/topic/messages', (message: Message) => {
+        const newMessage = JSON.parse(message.body);
+        this.messageSubject.next([...this.messageSubject.value, newMessage]);
+      });
     };
 
-    // Handle WebSocket connection close
-    this.socket.onclose = () => {
-      console.log('WebSocket connection closed');
+    // Handle connection error
+    this.client.onStompError = (error) => {
+      console.error('WebSocket error:', error);
     };
+
+    // Activate the connection
+    this.client.activate();
   }
 
-  // Send message to WebSocket server
-  sendMessage(message: string): void {
-    this.socket.send(message);
+  // Send a message to the WebSocket server
+  sendMessage(message: any): void {
+    this.client.publish({
+      destination: '/app/send',
+      body: JSON.stringify(message),
+    });
   }
 
-  // Get observable for incoming messages
-  getMessages() {
+  // Get an observable for messages
+  getMessages(): Observable<any[]> {
     return this.messageSubject.asObservable();
   }
 }

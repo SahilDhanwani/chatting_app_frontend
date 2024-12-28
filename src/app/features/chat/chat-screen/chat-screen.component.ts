@@ -34,6 +34,8 @@ export class ChatScreenComponent implements OnInit {
     this.curr_user_id = await this.getId(this.curr_username);
     this.other_user_id = await this.getId(this.other_username);
 
+    this.webSocketService.setCurrentUserId(this.curr_user_id);
+
     // Fetch initial messages from the database
     this.http
       .get(
@@ -75,11 +77,10 @@ export class ChatScreenComponent implements OnInit {
       this.webSocketService.sendMessage(JSON.stringify(message_packet)); // Send the entire message_packet
 
       // Optionally, add the sent message to the local messages array for immediate feedback
-      this.messages.push({
-        content: message_packet.message,
-        sentBy: 'me',
-        timestamp: message_packet.timestamp,
-      });
+      this.messages.push([
+        message_packet.message,
+        message_packet.sender_id
+      ]);
 
       // Clear the input
       this.messageInput = '';
@@ -95,7 +96,6 @@ export class ChatScreenComponent implements OnInit {
       );
     }
   }
-
 
   goBack() {
     window.history.back();

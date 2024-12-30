@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class WebSocketService {
   private client: Client;
-  private messageSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  private messageSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   private currentUserId: number | null = null;
 
   constructor() {
@@ -25,9 +25,11 @@ export class WebSocketService {
         try {
           const parsedMessage = JSON.parse(message.body); // Parse the message body
 
+          console.log('Parsed message after json:', parsedMessage);
+
           // Only accept messages intended for the current user
           if (parsedMessage.receiver_id === this.currentUserId) {
-            this.messageSubject.next([...this.messageSubject.value, parsedMessage]);
+            this.messageSubject.next(parsedMessage); // Save only the latest message
           }
         } catch (error) {
           console.error('Error parsing message body:', error);
@@ -47,6 +49,7 @@ export class WebSocketService {
   setCurrentUserId(userId: number): void {
     this.currentUserId = userId;
   }
+
   // Send a message to the server
   sendMessage(message: string): void {
     this.client.publish({
@@ -55,8 +58,8 @@ export class WebSocketService {
     });
   }
 
-  // Get the observable of messages
-  getMessages(): Observable<any[]> {
+  // Get the observable of the latest message
+  getMessages(): Observable<any | null> {
     return this.messageSubject.asObservable();
   }
 }

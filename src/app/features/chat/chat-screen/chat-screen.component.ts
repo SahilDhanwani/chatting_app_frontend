@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import { delay, lastValueFrom } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket.service'; // Import the WebSocketService
 @Component({
   selector: 'app-chat-screen',
@@ -51,8 +51,15 @@ export class ChatScreenComponent implements OnInit {
       );
 
     // Subscribe to incoming WebSocket messages
-    this.webSocketService.getMessages().subscribe((message) => {
-      this.messages.push(message); // Add received message to the chat
+    this.webSocketService.getMessages().subscribe((message_packet) => {
+
+      console.log('Received message from Socket:', message_packet);
+
+      if (message_packet != null)
+        this.messages.push([
+          message_packet.message,
+          message_packet.sender_id
+        ]);
     });
   }
 
@@ -60,7 +67,6 @@ export class ChatScreenComponent implements OnInit {
     const response = await lastValueFrom(
       this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`)
     );
-    console.log('The response is as : ', response);
     return response;
   }
 
@@ -84,16 +90,6 @@ export class ChatScreenComponent implements OnInit {
 
       // Clear the input
       this.messageInput = '';
-
-      // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', message_packet).subscribe(
-        (response) => {
-          console.log('Message sent successfully:', response);
-        },
-        (error) => {
-          console.error('Error sending message:', error);
-        }
-      );
     }
   }
 

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { delay, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket.service'; // Import the WebSocketService
 @Component({
   selector: 'app-chat-screen',
@@ -13,6 +13,7 @@ import { WebSocketService } from '../../../shared/web-socket.service'; // Import
 })
 
 export class ChatScreenComponent implements OnInit {
+  @ViewChild('messageContainer') chatContainer!: ElementRef; // Reference to chat container
   curr_username: any;
   messageInput: string = '';
   curr_user_id: any;
@@ -23,10 +24,12 @@ export class ChatScreenComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
+
     const state = window.history.state;
     this.curr_username = state.curr_username;
     this.other_username = state.other_username;
@@ -44,6 +47,8 @@ export class ChatScreenComponent implements OnInit {
       .subscribe(
         (response: any) => {
           this.messages = response;
+          this.cdr.detectChanges();
+          this.scrollToBottom();
         },
         (error) => {
           console.error('Error fetching messages:', error);
@@ -53,13 +58,14 @@ export class ChatScreenComponent implements OnInit {
     // Subscribe to incoming WebSocket messages
     this.webSocketService.getMessages().subscribe((message_packet) => {
 
-      console.log('Received message from Socket:', message_packet);
-
-      if (message_packet != null)
+      if (message_packet != null && message_packet.sender_id === this.other_user_id)
         this.messages.push([
           message_packet.message,
           message_packet.sender_id
         ]);
+
+      this.cdr.detectChanges();
+      this.scrollToBottom();
     });
   }
 
@@ -72,11 +78,24 @@ export class ChatScreenComponent implements OnInit {
 
   sendMessage() {
     if (this.messageInput.trim()) {
+
       const message_packet = {
         message: this.messageInput,
         sender_id: this.curr_user_id,
         receiver_id: this.other_user_id,
         timestamp: new Date().toISOString(), // Generate current timestamp
+      };
+
+      const last_message_packet_1 = {
+        user1: this.curr_username,
+        user2: this.other_username,
+        lastMessage: this.messageInput
+      };
+
+      const last_message_packet_2 = {
+        user1: this.other_username,
+        user2: this.curr_username,
+        lastMessage: this.messageInput
       };
 
       // Send message via WebSocket
@@ -87,13 +106,45 @@ export class ChatScreenComponent implements OnInit {
         message_packet.message,
         message_packet.sender_id
       ]);
+      this.cdr.detectChanges();
+      this.scrollToBottom();
+
+      // Send message to backend to save it in the database
+      this.http.post('http://localhost:8080/api/saveMessage', message_packet).subscribe(
+        (error) => {
+          console.error('Error sending message:', error);
+        }
+      );
+
+      // Send last message as sender to backend to save it in the database
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1).subscribe(
+        (error) => {
+          console.error('Error sending message:', error);
+        }
+      );
+
+      // Send last message as receiver to backend to save it in the database
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2).subscribe(
+        (error) => {
+          console.error('Error sending message:', error);
+        }
+      );
 
       // Clear the input
       this.messageInput = '';
+      this.scrollToBottom();
     }
   }
 
   goBack() {
     window.history.back();
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Failed to scroll to the bottom:', err);
+    }
   }
 }

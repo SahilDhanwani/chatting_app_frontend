@@ -21,7 +21,7 @@ export class WebSocketService {
     this.client.onConnect = () => {
       console.log('WebSocket connected');
       // Subscribe to '/topic/messages' to receive messages
-      this.client.subscribe('/topic/messages', (message: Message) => {
+      this.client.subscribe(`/topic/${this.currentUserId}/messages`, (message: Message) => {
         try {
           const parsedMessage = JSON.parse(message.body); // Parse the message body
 

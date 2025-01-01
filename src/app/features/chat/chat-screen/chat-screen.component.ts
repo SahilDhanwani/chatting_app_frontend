@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { WebSocketService } from '../../../shared/web-socket.service'; // Import the WebSocketService
+import { WebSocketService } from '../../../shared/web-socket/web-socket.service'; // Import the WebSocketService
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',

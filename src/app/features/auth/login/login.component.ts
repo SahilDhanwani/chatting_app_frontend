@@ -27,7 +27,6 @@ export class LoginComponent {
 
       const user = {
         username: this.username,
-        email: this.username,
         password: this.password,
       }
 

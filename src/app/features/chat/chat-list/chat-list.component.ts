@@ -2,12 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { jwt } from '../../../shared/jwt/jwt'; // Import the jwt class
 
-// interface Chat_Info {
-//   username: string;
-//   lastMessage: string;
-// }
 @Component({
   selector: 'app-chat-list',
   imports: [FormsModule, CommonModule, HttpClientModule],
@@ -27,18 +24,26 @@ export class ChatListComponent {
 
   async ngOnInit(): Promise<void> {
 
-    // console.log('ChatListComponent');
-
-    this.curr_username = window.history.state.username;
-
-    // console.log('Current User: ', this.curr_username);
+    await this.http.get(`http://localhost:8080/api/getUsername?id=${jwt.getId()}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
+      })
+    }).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.curr_username = response;
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
 
     await this.http.get(`http://localhost:8080/api/activeChats?username=${this.curr_username}`).subscribe(
       (response: any) => {
         this.ActiveChats = response;
       },
       (error) => {
-        // console.log(error);
+        console.log(error);
       }
     )
   }

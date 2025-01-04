@@ -31,14 +31,18 @@ export class ChatListComponent {
     }).subscribe(
       (response: any) => {
         console.log(response);
-        this.curr_username = response;
+        this.curr_username = response.username;
       },
       (error) => {
         console.log(error);
       }
     )
 
-    await this.http.get(`http://localhost:8080/api/activeChats?username=${this.curr_username}`).subscribe(
+    await this.http.get(`http://localhost:8080/api/activeChats?username=${this.curr_username}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
+      })
+    }).subscribe(
       (response: any) => {
         this.ActiveChats = response;
       },
@@ -51,7 +55,11 @@ export class ChatListComponent {
   // Open the "New Chat" modal
   openNewChat() {
     this.isModalOpen = true;
-    this.http.get('http://localhost:8080/api/allUsernames').subscribe(
+    this.http.get('http://localhost:8080/api/allUsernames', {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
+      })
+    }).subscribe(
       (response: any) => {
         this.allUsernames = response;
       },

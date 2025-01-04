@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { jwt } from '../jwt/jwt'; // Import JWT utility
 
 @Injectable({
   providedIn: 'root',
@@ -12,53 +13,50 @@ export class WebSocketService {
   private currentUserId: number | null = null;
 
   constructor() {
+    const token = jwt.getToken(); // Get the JWT token
+
     this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws/chat'),  // Spring Boot WebSocket endpoint
-      reconnectDelay: 5000,  // Auto reconnect on failure
+      webSocketFactory: () =>
+        new SockJS(`http://localhost:8080/ws/chat?token=${token}`), // Add token as query parameter
+      reconnectDelay: 5000, // Auto reconnect on failure
     });
 
     // Handle connection established
     this.client.onConnect = () => {
       console.log('WebSocket connected');
-      // Subscribe to '/topic/messages' to receive messages
-      this.client.subscribe(`/topic/${this.currentUserId}/messages`, (message: Message) => {
-        try {
-          const parsedMessage = JSON.parse(message.body); // Parse the message body
-
-          console.log('Parsed message after json:', parsedMessage);
-
-          // Only accept messages intended for the current user
-          if (parsedMessage.receiver_id === this.currentUserId) {
-            this.messageSubject.next(parsedMessage); // Save only the latest message
+      if (this.currentUserId) {
+        this.client.subscribe(`/topic/${this.currentUserId}/messages`, (message: Message) => {
+          try {
+            const parsedMessage = JSON.parse(message.body);
+            if (parsedMessage.receiver_id === this.currentUserId) {
+              this.messageSubject.next(parsedMessage);
+            }
+          } catch (error) {
+            console.error('Error parsing message body:', error);
           }
-        } catch (error) {
-          console.error('Error parsing message body:', error);
-        }
-      });
+        });
+      }
     };
 
-    // Handle WebSocket connection errors
+    // Handle WebSocket errors
     this.client.onStompError = (error) => {
       console.error('WebSocket error:', error);
     };
 
-    // Activate WebSocket connection
-    this.client.activate();
+    this.client.activate(); // Activate WebSocket connection
   }
 
   setCurrentUserId(userId: number): void {
     this.currentUserId = userId;
   }
 
-  // Send a message to the server
   sendMessage(message: string): void {
     this.client.publish({
-      destination: '/app/send',  // STOMP message destination
-      body: message,  // The message itself
+      destination: '/app/send',
+      body: message,
     });
   }
 
-  // Get the observable of the latest message
   getMessages(): Observable<any | null> {
     return this.messageSubject.asObservable();
   }

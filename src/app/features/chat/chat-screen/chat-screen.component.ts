@@ -35,25 +35,8 @@ export class ChatScreenComponent implements OnInit {
     this.curr_username = state.curr_username;
     this.other_username = state.other_username;
 
-    console.log(this.curr_username)
-    console.log(this.other_username)
-
-    this.http.get<number>(`http://localhost:8080/api/getId?username=${this.curr_username}`, {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-      })
-    }).subscribe(
-      (response: any) => {
-        this.curr_user_id = response;
-        console.log('Current user ID:', this.curr_user_id.toISOString);
-      },
-      (error) => {
-        console.error('Error fetching user ID:', error);
-      }
-    );
-
-    // this.curr_user_id = await this.getId(this.curr_username);
-    // this.other_user_id = await this.getId(this.other_username);
+    this.curr_user_id = await this.getId(this.curr_username);
+    this.other_user_id = await this.getId(this.other_username);
 
     this.webSocketService.setCurrentUserId(this.curr_user_id);
 
@@ -77,17 +60,17 @@ export class ChatScreenComponent implements OnInit {
       );
 
     // Subscribe to incoming WebSocket messages
-    // this.webSocketService.getMessages().subscribe((message_packet) => {
+    this.webSocketService.getMessages().subscribe((message_packet) => {
 
-    //   if (message_packet != null && message_packet.sender_id === this.other_user_id)
-    //     this.messages.push([
-    //       message_packet.message,
-    //       message_packet.sender_id
-    //     ]);
+      if (message_packet != null && message_packet.sender_id === this.other_user_id)
+        this.messages.push([
+          message_packet.message,
+          message_packet.sender_id
+        ]);
 
-    //   this.cdr.detectChanges();
-    //   this.scrollToBottom();
-    // });
+      this.cdr.detectChanges();
+      this.scrollToBottom();
+    });
   }
 
   async getId(username: string): Promise<number> {

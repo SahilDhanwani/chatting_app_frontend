@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket/web-socket.service'; // Import the WebSocketService
-import { jwt } from '../../../shared/jwt/jwt';
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',
@@ -27,7 +26,9 @@ export class ChatScreenComponent implements OnInit {
     private http: HttpClient,
     private webSocketService: WebSocketService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) { 
+    
+  }
 
   async ngOnInit() {
 
@@ -43,21 +44,17 @@ export class ChatScreenComponent implements OnInit {
     // Fetch initial messages from the database
     this.http
       .get(
-        `http://localhost:8080/api/getMessages?user1=${this.curr_user_id}&user2=${this.other_user_id}`, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-        })
-      })
-      .subscribe(
-        (response: any) => {
-          this.messages = response;
-          this.cdr.detectChanges();
-          this.scrollToBottom();
-        },
-        (error) => {
-          console.error('Error fetching messages:', error);
-        }
-      );
+        `http://localhost:8080/api/getMessages?user1=${this.curr_user_id}&user2=${this.other_user_id}`,
+        { withCredentials: true }).subscribe(
+          (response: any) => {
+            this.messages = response;
+            this.cdr.detectChanges();
+            this.scrollToBottom();
+          },
+          (error) => {
+            console.error('Error fetching messages:', error);
+          }
+        );
 
     // Subscribe to incoming WebSocket messages
     this.webSocketService.getMessages().subscribe((message_packet) => {
@@ -75,11 +72,7 @@ export class ChatScreenComponent implements OnInit {
 
   async getId(username: string): Promise<number> {
     const response = await lastValueFrom(
-      this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-        })
-      })
+      this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`, { withCredentials: true })
     );
     return response;
   }
@@ -118,33 +111,21 @@ export class ChatScreenComponent implements OnInit {
       this.scrollToBottom();
 
       // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', message_packet, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-        })
-      }).subscribe(
+      this.http.post('http://localhost:8080/api/saveMessage', message_packet).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as sender to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-        })
-      }).subscribe(
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as receiver to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${jwt.getToken()}`  // Include the token in the Authorization header
-        })
-      }).subscribe(
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }

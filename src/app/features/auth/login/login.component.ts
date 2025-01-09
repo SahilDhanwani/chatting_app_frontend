@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { jwt } from '../../../shared/jwt/jwt'; // Correct import of jwt class
 
 @Component({
   standalone: true, // Makes the component standalone
@@ -31,31 +30,16 @@ export class LoginComponent {
         password: this.password,
       }
 
-      this.http.post('http://localhost:8080/api/auth/login', user).subscribe(
-        (response: any) => { // Type response as 'any' or specific type
-          if (response && response.token) {
-            console.log(response);
-            jwt.setToken(response.token); // Call the static method to set token
-            this.router.navigate(['/chatlist']);
-          }
-          else {
-            alert('Invalid username or password! Please try again.');
-          }
+      this.http.post('http://localhost:8080/api/auth/login', user, { withCredentials: true }).subscribe(
+        (response) => {
+          console.log('Login successful:', response); // Log success message
+          this.router.navigate(['/chatlist']); // Redirect to chat list
         },
         (error) => {
-          console.log(error);
-          this.loginError = error.error.message;
+          console.error('Login error:', error);
+          alert('Invalid username or password! Please try again.');
         }
-      )
+      );
     }
-  }
-
-  getuserName(id: any) {
-    this.http.get<{ username: string }>(`http://localhost:8080/api/getUsername?id=${id}`).subscribe(
-      (response) => {
-        this.username = response.username;
-      },
-    );
-    return this.username;
   }
 }

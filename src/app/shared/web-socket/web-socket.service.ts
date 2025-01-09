@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { jwt } from '../jwt/jwt'; // Import JWT utility
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +11,14 @@ export class WebSocketService {
   private messageSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   private currentUserId: number | null = null;
 
-  constructor() {
-    const token = jwt.getToken(); // Get the JWT token
-
+  constructor() { // Get the JWT token
+    
     this.client = new Client({
       webSocketFactory: () =>
-        new SockJS(`http://localhost:8080/ws/chat?token=${token}`), // Add token as query parameter
-      reconnectDelay: 5000, // Auto reconnect on failure
+        new SockJS(`http://localhost:8080/ws/chat`, null, {
+          withCredentials: true, // Send cookies with the request
+        }),
+      reconnectDelay: 5000, // Auto-reconnect on failure
     });
 
     // Handle connection established
@@ -61,4 +61,3 @@ export class WebSocketService {
     return this.messageSubject.asObservable();
   }
 }
- 

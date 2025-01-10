@@ -39,7 +39,6 @@ export class WebSocketService {
 
 
     this.client.onConnect = () => {
-      console.log('WebSocket connected');
       if (this.currentUserId) {
         this.client.subscribe(`/topic/${this.currentUserId}/messages`, (message: Message) => {
           try {
@@ -68,14 +67,11 @@ export class WebSocketService {
   sendMessage(message: string): void {
 
     if (this.client && this.client.connected) {
-      console.log('Sending message. Connected hai:', message);
+      this.client.publish({
+        destination: '/app/send',
+        body: message,
+      });
     }
-    this.client.publish({
-      destination: '/app/send',
-      body: message,
-    });
-
-    console.log('Message sent after publish:', message);
   }
 
   getMessages(): Observable<any | null> {

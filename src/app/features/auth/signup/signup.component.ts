@@ -40,19 +40,14 @@ export class SignupComponent {
         password: this.password,
       }
 
-      this.http.post('http://localhost:8080/api/auth/signup', user).subscribe(
+      this.http.post('http://localhost:8080/api/auth/signup', user, { withCredentials: true }).subscribe(
         (response) => {
-          if (response) {
-            alert('User created successfully! Please login to continue.');
-            this.router.navigate(['/auth/login']);
-          }
-          else {
-            alert('Username or Email already exists! Please try again.');
-          }
-
-        }, (error) => {
-          console.log(error);
-          this.signupError = error.error.message;
+          alert('User created successfully! Please login to continue.');
+          this.router.navigate(['/auth/login']);
+        }, 
+        
+        (error) => {
+          alert('Username or Email already exists! Please try again.');
         });
     }
   }

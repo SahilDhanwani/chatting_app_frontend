@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket/web-socket.service'; // Import the WebSocketService
 @Component({
@@ -10,6 +10,7 @@ import { WebSocketService } from '../../../shared/web-socket/web-socket.service'
   templateUrl: './chat-screen.component.html',
   imports: [FormsModule, CommonModule, HttpClientModule],
   styleUrls: ['./chat-screen.component.css'],
+  providers: [WebSocketService] // Add WebSocketService to the providers array
 })
 
 export class ChatScreenComponent implements OnInit {
@@ -99,8 +100,13 @@ export class ChatScreenComponent implements OnInit {
         lastMessage: this.messageInput
       };
 
+      console.log('Sending message:', message_packet);
+
       // Send message via WebSocket
       this.webSocketService.sendMessage(JSON.stringify(message_packet)); // Send the entire message_packet
+
+      console.log('Message sent:');
+
 
       // Optionally, add the sent message to the local messages array for immediate feedback
       this.messages.push([
@@ -111,21 +117,21 @@ export class ChatScreenComponent implements OnInit {
       this.scrollToBottom();
 
       // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', message_packet).subscribe(
+      this.http.post('http://localhost:8080/api/saveMessage', message_packet, {withCredentials: true}).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as sender to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1).subscribe(
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1, {withCredentials: true}).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as receiver to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2).subscribe(
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2, {withCredentials: true}).subscribe(
         (error) => {
           console.error('Error sending message:', error);
         }

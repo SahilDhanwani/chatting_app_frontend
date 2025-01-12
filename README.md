@@ -1,59 +1,44 @@
-# ChattingAppFrontend
+## About ChattingAppFrontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+ChattingAppFrontend is a web-based chat application built using Angular. It provides a user-friendly interface for real-time messaging, allowing users to communicate seamlessly. The application leverages modern web technologies to ensure a responsive and efficient user experience.
 
-## Development server
+### Features
 
-To start a local development server, run:
+- **Real-time Messaging**: Send and receive messages instantly.
+- **User Authentication**: Secure login and registration system.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **User Profiles**: Manage user information and profile pictures. *(Future Scope)*
+- **Group Chats**: Create and join group conversations. *(Future Scope)*
+- **Notifications**: Receive notifications for new messages and activities. *(Future Scope)*
 
-```bash
-ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Technologies Used
 
-## Code scaffolding
+- **Angular**: Frontend framework for building dynamic web applications.
+- **RxJS**: Reactive programming library for handling asynchronous data streams.
+- **Angular Material**: UI component library for a consistent and modern design.
+- **Java Springboot**: Backend-as-a-Service for authentication, real-time database.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Getting Started
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+To get started with the project, clone the repository and install the necessary dependencies:
 
 ```bash
-ng build
+git clone https://github.com/yourusername/chatting_app_frontend.git
+cd chatting_app_frontend
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+After installing the dependencies, you can start the development server as described in the Development server section above.
 
-## Running unit tests
+### Backend
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+The backend for this project is built using Spring Boot. You can find the backend repository [here](https://github.com/SahilDhanwani/ChattingApplication).
 
-```bash
-ng test
-```
+### Contributing
 
-## Running end-to-end tests
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request. Make sure to follow the project's code of conduct.
 
-For end-to-end (e2e) testing, run:
+### License
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.

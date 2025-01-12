@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,13 +19,16 @@ export class ChatListComponent {
   isModalOpen = false;  // Controls whether the modal is open or closed
   searchText = '';  // Search text for filtering users
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(
+    private router: Router, 
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef,
+  ) { }
 
   async ngOnInit(): Promise<void> {
 
     await this.http.get('http://localhost:8080/api/getUsername', { withCredentials: true }).subscribe(
       (response: any) => {
-        console.log(response);
         this.curr_username = response.username;
       },
       (error) => {
@@ -33,9 +36,11 @@ export class ChatListComponent {
       }
     )
 
-    await this.http.get(`http://localhost:8080/api/activeChats?username=${this.curr_username}`, { withCredentials: true}).subscribe(
+    await this.http.get('http://localhost:8080/api/activeChats', { withCredentials: true}).subscribe(
       (response: any) => {
+        console.log(response);
         this.ActiveChats = response;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.log(error);

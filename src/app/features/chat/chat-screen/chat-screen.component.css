@@ -5,7 +5,6 @@
     flex-direction: column;
     height: 100dvh;
     background: linear-gradient(to bottom, #4e4376, #2b5876);
-    /* Gradient background for a premium feel */
     color: white;
     animation: fadeIn 1s ease-out;
     box-sizing: border-box;
@@ -19,7 +18,6 @@
     color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    /* Subtle border for separation */
 }
 
 .back-button {
@@ -50,7 +48,6 @@
     height: 50px;
     border-radius: 50%;
     border: 3px solid rgba(255, 255, 255, 0.2);
-    /* Elegant border */
     margin-right: 15px;
     overflow: hidden;
 }
@@ -66,7 +63,6 @@
     font-weight: 600;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    /* Text depth for premium feel */
 }
 
 .message-container {
@@ -77,9 +73,7 @@
     flex-direction: column;
     gap: 10px;
     background: rgba(255, 255, 255, 0.1);
-    /* Subtle background */
     border-top: 1px solid rgba(255, 255, 255, 0.2);
-    /* Subtle separation */
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -91,10 +85,8 @@
     line-height: 1.5;
     word-wrap: break-word;
     background: rgba(255, 255, 255, 0.1);
-    /* Subtle background */
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Depth */
     transition: transform 0.3s ease;
 }
 
@@ -111,7 +103,6 @@
 
 .message:hover {
     transform: scale(1.05);
-    /* Subtle hover effect for messages */
 }
 
 .input-container {
@@ -119,7 +110,6 @@
     align-items: center;
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.1);
-    /* Matches the message-container */
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     gap: 10px;
 }
@@ -142,7 +132,6 @@ input::placeholder {
 
 input:focus {
     box-shadow: 0 0 5px rgba(255, 223, 0, 0.8);
-    /* Glow effect */
     border: 1px solid rgba(255, 223, 0, 0.8);
 }
 

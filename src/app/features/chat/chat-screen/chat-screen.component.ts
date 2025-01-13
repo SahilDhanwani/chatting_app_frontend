@@ -27,9 +27,7 @@ export class ChatScreenComponent implements OnInit {
     private http: HttpClient,
     private webSocketService: WebSocketService,
     private cdr: ChangeDetectorRef
-  ) { 
-    
-  }
+  ) {}
 
   async ngOnInit() {
 
@@ -85,7 +83,7 @@ export class ChatScreenComponent implements OnInit {
         message: this.messageInput,
         sender_id: this.curr_user_id,
         receiver_id: this.other_user_id,
-        timestamp: new Date().toISOString(), // Generate current timestamp
+        timestamp: new Date().toISOString(),
       };
 
       const last_message_packet_1 = {
@@ -101,13 +99,14 @@ export class ChatScreenComponent implements OnInit {
       };
 
       // Send message via WebSocket
-      this.webSocketService.sendMessage(JSON.stringify(message_packet)); // Send the entire message_packet
+      this.webSocketService.sendMessage(JSON.stringify(message_packet));
 
       // Optionally, add the sent message to the local messages array for immediate feedback
       this.messages.push([
         message_packet.message,
         message_packet.sender_id
       ]);
+      
       this.cdr.detectChanges();
       this.scrollToBottom();
 

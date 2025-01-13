@@ -48,7 +48,6 @@ export class ChatListComponent {
     )
   }
 
-  // Open the "New Chat" modal
   openNewChat() {
     this.isModalOpen = true;
     this.http.get('http://localhost:8080/api/allUsernames', { withCredentials: true}).subscribe(
@@ -61,7 +60,6 @@ export class ChatListComponent {
     )
   }
 
-  // Close the modal
   closeModal() {
     this.isModalOpen = false;
   }

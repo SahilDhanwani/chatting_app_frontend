@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #6a11cb, #2575fc); /* Same gradient as login page */
+    background: linear-gradient(to bottom, #6a11cb, #2575fc);
     color: white;
     text-align: center;
     padding: 20px;
@@ -52,7 +52,7 @@ button {
 }
 
 .login-btn {
-    background-color: #f8b400; /* Bright color for the login button */
+    background-color: #f8b400;
     color: white;
     border: 2px solid #f8b400;
 
@@ -68,7 +68,7 @@ button {
 }
 
 .signup-btn {
-    background-color: #2575fc; /* Complementary color for the signup button */
+    background-color: #2575fc;
     color: white;
     border: 2px solid #2575fc;
 

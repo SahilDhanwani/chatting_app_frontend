@@ -13,14 +13,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   imports: [FormsModule, CommonModule, RouterModule, HttpClientModule],
   styleUrls: ['./signup.component.css'],
 })
+
 export class SignupComponent {
   username: string = '';
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  signupError: string = ''; // To store error messages
+  signupError: string = '';
   signUpClicked: boolean = false;
-  isPasswordMatching: boolean = true; // To track if passwords match
+  isPasswordMatching: boolean = true;
 
   constructor(private router: Router, private http: HttpClient) { }
 

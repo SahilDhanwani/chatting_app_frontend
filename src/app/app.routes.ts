@@ -13,6 +13,6 @@ export const routes: Routes = [
     { path: 'chatlist', component: ChatListComponent },
     { path: 'chat/:username', component: ChatScreenComponent },
 
-    { path: '**', redirectTo: '' } // Redirect to Home Page if route doesn't exist
+    { path: '**', redirectTo: '' }
 
 ];

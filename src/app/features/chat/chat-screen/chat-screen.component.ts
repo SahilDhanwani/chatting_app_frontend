@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -23,11 +23,11 @@ export class ChatScreenComponent implements OnInit {
   messages: any[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
     private http: HttpClient,
     private webSocketService: WebSocketService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   async ngOnInit() {
 
@@ -51,6 +51,10 @@ export class ChatScreenComponent implements OnInit {
             this.scrollToBottom();
           },
           (error) => {
+            if (error.status === 403) {
+              alert('Session Expired, Please login Again');
+              this.router.navigate(['/auth/login']);
+            }
             console.error('Error fetching messages:', error);
           }
         );
@@ -70,10 +74,19 @@ export class ChatScreenComponent implements OnInit {
   }
 
   async getId(username: string): Promise<number> {
-    const response = await lastValueFrom(
-      this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`, { withCredentials: true })
-    );
-    return response;
+    try {
+      const response = await lastValueFrom(
+        this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`, { withCredentials: true })
+      );
+      return response;
+    } catch (error) {
+      const err = error as any;
+      if (err.status === 403) {
+        alert('Session Expired, Please login Again');
+        this.router.navigate(['/auth/login']);
+      }
+      return -1;
+    }
   }
 
   sendMessage() {
@@ -106,30 +119,42 @@ export class ChatScreenComponent implements OnInit {
         message_packet.message,
         message_packet.sender_id
       ]);
-      
+
       this.cdr.detectChanges();
       this.scrollToBottom();
 
       // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', message_packet, {withCredentials: true}).subscribe(
-        (Response) => {},
+      this.http.post('http://localhost:8080/api/saveMessage', message_packet, { withCredentials: true }).subscribe(
+        (Response) => { },
         (error) => {
+          if (error.status === 403) {
+            alert('Session Expired, Please login Again');
+            this.router.navigate(['/auth/login']);
+          }
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as sender to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1, {withCredentials: true}).subscribe(
-        (Response) => {},
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1, { withCredentials: true }).subscribe(
+        (Response) => { },
         (error) => {
+          if (error.status === 403) {
+            alert('Session Expired, Please login Again');
+            this.router.navigate(['/auth/login']);
+          }
           console.error('Error sending message:', error);
         }
       );
 
       // Send last message as receiver to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2, {withCredentials: true}).subscribe(
-        (Response) => {},
+      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2, { withCredentials: true }).subscribe(
+        (Response) => { },
         (error) => {
+          if (error.status === 403) {
+            alert('Session Expired, Please login Again');
+            this.router.navigate(['/auth/login']);
+          }
           console.error('Error sending message:', error);
         }
       );

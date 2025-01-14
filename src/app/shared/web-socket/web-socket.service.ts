@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -14,15 +15,18 @@ export class WebSocketService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
   ) {
-
     this.http.get('http://localhost:8080/api/validate', { withCredentials: true }).subscribe(
       (response) => {
         this.setUpSocket(response);
       },
       (error) => {
+        if (error.status === 403) {
+          alert('Session Expired, Please login Again');
+          this.router.navigate(['/auth/login']);
+        }
         console.error('Authentication failed:', error);
-        alert('You need to log in first');
       }
     );
   }
@@ -43,13 +47,13 @@ export class WebSocketService {
     this.client.onConnect = () => {
       if (this.currentUserId) {
         console.log('Subscribing to /user/queue/messages for user:', this.currentUserId);
-    
+
         // Subscribe to user-specific queue
         this.client.subscribe(`/user/queue/messages`, (message: Message) => {
           try {
             const parsedMessage = JSON.parse(message.body);
             console.log('Received message:', parsedMessage);
-    
+
             if (parsedMessage.receiver_id === this.currentUserId) {
               this.messageSubject.next(parsedMessage);
             }

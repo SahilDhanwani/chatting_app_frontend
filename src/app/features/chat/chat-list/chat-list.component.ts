@@ -20,7 +20,7 @@ export class ChatListComponent {
   searchText = '';  // Search text for filtering users
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
   ) { }
@@ -32,17 +32,25 @@ export class ChatListComponent {
         this.curr_username = response.username;
       },
       (error) => {
+        if (error.status === 403) {
+          alert('Session Expired, Please login Again');
+          this.router.navigate(['/auth/login']);
+        }
         console.log(error);
       }
     )
 
-    await this.http.get('http://localhost:8080/api/activeChats', { withCredentials: true}).subscribe(
+    await this.http.get('http://localhost:8080/api/activeChats', { withCredentials: true }).subscribe(
       (response: any) => {
         console.log(response);
         this.ActiveChats = response;
         this.cdr.detectChanges();
       },
       (error) => {
+        if (error.status === 403) {
+          alert('Session Expired, Please login Again');
+          this.router.navigate(['/auth/login']);
+        }
         console.log(error);
       }
     )
@@ -50,11 +58,15 @@ export class ChatListComponent {
 
   openNewChat() {
     this.isModalOpen = true;
-    this.http.get('http://localhost:8080/api/allUsernames', { withCredentials: true}).subscribe(
+    this.http.get('http://localhost:8080/api/allUsernames', { withCredentials: true }).subscribe(
       (response: any) => {
         this.allUsernames = response;
       },
       (error) => {
+        if (error.status === 403) {
+          alert('Session Expired, Please login Again');
+          this.router.navigate(['/auth/login']);
+        }
         // console.log(error);
       }
     )

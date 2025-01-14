@@ -46,7 +46,6 @@ export class SignupComponent {
           alert('User created successfully! Please login to continue.');
           this.router.navigate(['/auth/login']);
         }, 
-        
         (error) => {
           alert('Username or Email already exists! Please try again.');
         });

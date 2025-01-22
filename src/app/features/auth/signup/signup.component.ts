@@ -49,6 +49,7 @@ export class SignupComponent {
           this.router.navigate(['/auth/login']);
         },
         (error) => {
+          console.error('Login error:', error);
           alert('Username or Email already exists! Please try again.');
         });
     }

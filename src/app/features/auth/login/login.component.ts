@@ -22,7 +22,7 @@ export class LoginComponent {
   loginError: string = '';
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private http: HttpClient,
     private form_data: LoginResponse
   ) { }
@@ -37,7 +37,6 @@ export class LoginComponent {
 
       this.http.post('http://localhost:8080/api/auth/login', this.form_data, { withCredentials: true }).subscribe(
         (response) => {
-          console.log('Login successful:', response); 
           this.router.navigate(['/chatlist']);
         },
         (error) => {

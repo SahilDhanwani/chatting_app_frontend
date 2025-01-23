@@ -16,11 +16,11 @@ import { SignupResponse } from '../../../shared/data_packets/Responses/SignupRes
 })
 
 export class SignupComponent {
-  username: String = '';
-  email: String = '';
-  password: String = '';
-  confirmPassword: String = '';
-  signupError: String = '';
+  username: string = '';
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
+  signupError: string = '';
   signUpClicked: boolean = false;
   isPasswordMatching: boolean = true;
 

@@ -6,14 +6,14 @@
     </div>
 
     <!-- Display list of users for chat -->
-    <div *ngFor="let chat of ActiveChats" class="chat-item" (click)="openChat(chat[0])">
+    <div *ngFor="let chat of ActiveChatsList" class="chat-item" (click)="openChat(chat.getUsername())">
         <div class="avatar">
             <img src="https://img.freepik.com/free-vector/young-prince-vector-illustration_1308-174367.jpg"
                 alt="User Avatar">
         </div>
         <div class="chat-info">
-            <p class="user-name">{{ chat[0] }}</p>
-            <p class="last-message">{{ chat[1] }}</p>
+            <p class="user-name">{{ chat.getUsername() }}</p>
+            <p class="last-message">{{ chat.getLastMessage() }}</p>
         </div>
     </div>
 </div>

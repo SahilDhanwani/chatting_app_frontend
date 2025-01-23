@@ -1,17 +1,17 @@
 export class LoginResponse {
-    private username:String = "";
-    private password:String = "";
-    
-    getUsername():String {
+    private username: string = "";
+    private password: string = "";
+
+    getUsername(): string {
         return this.username;
     }
-    setUsername(username:String) {
+    setUsername(username: string) {
         this.username = username;
     }
-    getPassword():String {
+    getPassword(): string {
         return this.password;
     }
-    setPassword(password:String) {
+    setPassword(password: string) {
         this.password = password;
     }
 }

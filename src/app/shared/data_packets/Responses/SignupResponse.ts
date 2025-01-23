@@ -1,24 +1,24 @@
 export class SignupResponse {
-    private username:String = "";
-    private password:String = "";
-    private email:String = "";
+    private username: string = "";
+    private password: string = "";
+    private email: string = "";
 
-    getUsername():String {
+    getUsername(): string {
         return this.username;
     }
-    setUsername(username:String) {
+    setUsername(username: string) {
         this.username = username;
     }
-    getPassword():String {
+    getPassword(): string {
         return this.password;
     }
-    setPassword(password:String) {
+    setPassword(password: string) {
         this.password = password;
     }
-    getEmail():String {
+    getEmail(): string {
         return this.email;
     }
-    setEmail(email:String) {
+    setEmail(email: string) {
         this.email = email;
     }
 }

@@ -5,12 +5,23 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket/web-socket.service'; // Import the WebSocketService
+import { GetMessageResponse } from '../../../shared/data_packets/Responses/GetMessageResponse';
+import { GetIdResponse } from '../../../shared/data_packets/Responses/GetIdResponse';
+import { SaveMessageResponse } from '../../../shared/data_packets/Responses/SaveMessageResponse';
+import { saveLastMessageResponse } from '../../../shared/data_packets/Responses/SaveLastMessageResponse';
+import { GetMessagesRequest } from '../../../shared/data_packets/Requests/GetMessagesRequest';
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',
   imports: [FormsModule, CommonModule, HttpClientModule],
   styleUrls: ['./chat-screen.component.css'],
-  providers: [WebSocketService] // Add WebSocketService to the providers array
+  providers: [
+    WebSocketService, 
+    GetMessageResponse, 
+    GetIdResponse, 
+    SaveMessageResponse, 
+    saveLastMessageResponse,
+    GetMessagesRequest]
 })
 
 export class ChatScreenComponent implements OnInit {
@@ -26,7 +37,13 @@ export class ChatScreenComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private webSocketService: WebSocketService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private GetMessageResponse: GetMessageResponse,
+    private GetIdResponse: GetIdResponse,
+    private SaveMessageResponse: SaveMessageResponse,
+    private SaveLastMessageResponse: saveLastMessageResponse,
+    private GetMessageRequest: GetMessagesRequest
+
   ) { }
 
   async ngOnInit() {
@@ -40,10 +57,13 @@ export class ChatScreenComponent implements OnInit {
 
     this.webSocketService.setCurrentUserId(this.curr_user_id);
 
+    this.GetMessageResponse.setUser1_id(this.curr_user_id);
+    this.GetMessageResponse.setUser2_id(this.other_user_id);
+
     // Fetch initial messages from the database
     this.http
       .get(
-        `http://localhost:8080/api/getMessages?user1=${this.curr_user_id}&user2=${this.other_user_id}`,
+        `http://localhost:8080/api/getMessages?form_data=${this.GetMessageResponse}`,
         { withCredentials: true }).subscribe(
           (response: any) => {
             this.messages = response;
@@ -75,8 +95,9 @@ export class ChatScreenComponent implements OnInit {
 
   async getId(username: string): Promise<number> {
     try {
+      this.GetIdResponse.setUsername(username);
       const response = await lastValueFrom(
-        this.http.get<number>(`http://localhost:8080/api/getId?username=${username}`, { withCredentials: true })
+        this.http.get<number>(`http://localhost:8080/api/getId?form_data=${this.GetIdResponse}`, { withCredentials: true })
       );
       return response;
     } catch (error) {
@@ -92,39 +113,25 @@ export class ChatScreenComponent implements OnInit {
   sendMessage() {
     if (this.messageInput.trim()) {
 
-      const message_packet = {
-        message: this.messageInput,
-        sender_id: this.curr_user_id,
-        receiver_id: this.other_user_id,
-        timestamp: new Date().toISOString(),
-      };
-
-      const last_message_packet_1 = {
-        user1: this.curr_username,
-        user2: this.other_username,
-        lastMessage: this.messageInput
-      };
-
-      const last_message_packet_2 = {
-        user1: this.other_username,
-        user2: this.curr_username,
-        lastMessage: this.messageInput
-      };
-
       // Send message via WebSocket
-      this.webSocketService.sendMessage(JSON.stringify(message_packet));
+      this.webSocketService.sendMessage(JSON.stringify(this.SaveMessageResponse));
 
       // Optionally, add the sent message to the local messages array for immediate feedback
       this.messages.push([
-        message_packet.message,
-        message_packet.sender_id
+        this.messageInput,
+        this.curr_user_id
       ]);
 
       this.cdr.detectChanges();
       this.scrollToBottom();
 
+      this.SaveMessageResponse.setMessage(this.messageInput);
+      this.SaveMessageResponse.setSender_id(this.curr_user_id);
+      this.SaveMessageResponse.setReceiver_id(this.other_user_id);
+      this.SaveMessageResponse.setTimestamp(new Date().toISOString());
+
       // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', message_packet, { withCredentials: true }).subscribe(
+      this.http.post('http://localhost:8080/api/saveMessage', this.SaveMessageResponse, { withCredentials: true }).subscribe(
         (Response) => { },
         (error) => {
           if (error.status === 403) {
@@ -134,21 +141,13 @@ export class ChatScreenComponent implements OnInit {
           console.error('Error sending message:', error);
         }
       );
+
+      this.SaveLastMessageResponse.setUsername1(this.curr_username);
+      this.SaveLastMessageResponse.setUsername2(this.other_username);
+      this.SaveLastMessageResponse.setLastMessage(this.messageInput);
 
       // Send last message as sender to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_1, { withCredentials: true }).subscribe(
-        (Response) => { },
-        (error) => {
-          if (error.status === 403) {
-            alert('Session Expired, Please login Again');
-            this.router.navigate(['/auth/login']);
-          }
-          console.error('Error sending message:', error);
-        }
-      );
-
-      // Send last message as receiver to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', last_message_packet_2, { withCredentials: true }).subscribe(
+      this.http.post('http://localhost:8080/api/saveLastMessage', this.SaveLastMessageResponse, { withCredentials: true }).subscribe(
         (Response) => { },
         (error) => {
           if (error.status === 403) {

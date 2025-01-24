@@ -1,6 +1,6 @@
-export class GetMessagesRequest {
+export class GetMessagesResponse {
     private message: string = "";
-    private senderId: number = 0;
+    private sender_id: number = 0;
 
     getMessage(): string {
         return this.message;
@@ -11,10 +11,10 @@ export class GetMessagesRequest {
     }
 
     getSenderId(): number {
-        return this.senderId;
+        return this.sender_id;
     }
 
-    setSenderId(senderId: number) {
-        this.senderId = senderId;
+    setSenderId(sender_id: number) {
+        this.sender_id = sender_id;
     }
 }

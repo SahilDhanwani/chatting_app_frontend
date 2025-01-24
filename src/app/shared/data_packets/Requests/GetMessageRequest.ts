@@ -1,4 +1,4 @@
-export class GetMessageResponse {
+export class GetMessageRequest {
     private user1_id: number = 0;
     private user2_id: number = 0;
 

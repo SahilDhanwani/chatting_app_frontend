@@ -11,7 +11,7 @@ export const routes: Routes = [
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/signup', component: SignupComponent },
     { path: 'chatlist', component: ChatListComponent },
-    { path: 'chat/:username', component: ChatScreenComponent },
+    { path: 'chat', component: ChatScreenComponent },
 
     { path: '**', redirectTo: '' }
 

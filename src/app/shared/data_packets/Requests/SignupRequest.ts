@@ -1,4 +1,4 @@
-export class SignupResponse {
+export class SignupRequest {
     private username: string = "";
     private password: string = "";
     private email: string = "";

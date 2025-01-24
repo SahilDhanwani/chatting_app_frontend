@@ -1,15 +1,6 @@
-export class saveLastMessageResponse {
-    private username1: string = "";
+export class saveLastMessageRequest {
     private username2: string = "";
     private lastMessage: string = "";
-
-    getUsername1(): string {
-        return this.username1;
-    }
-
-    setUsername1(username1: string) {
-        this.username1 = username1;
-    }
 
     getUsername2(): string {
         return this.username2;

@@ -18,8 +18,8 @@ export class WebSocketService {
     private router: Router,
   ) {
     this.http.get('http://localhost:8080/api/validate', { withCredentials: true }).subscribe(
-      (response) => {
-        this.setUpSocket(response);
+      (response: any) => {
+        this.setUpSocket(response.id);
       },
       (error) => {
         if (error.status === 403) {
@@ -33,8 +33,6 @@ export class WebSocketService {
 
   setUpSocket(id: any): void {
 
-    console.log('Setting up socket with id:', id);
-
     this.client = new Client({
       webSocketFactory: () =>
         new SockJS(`http://localhost:8080/ws/chat?id=${id}`, null, {
@@ -46,13 +44,11 @@ export class WebSocketService {
 
     this.client.onConnect = () => {
       if (this.currentUserId) {
-        console.log('Subscribing to /user/queue/messages for user:', this.currentUserId);
 
         // Subscribe to user-specific queue
         this.client.subscribe(`/user/queue/messages`, (message: Message) => {
           try {
             const parsedMessage = JSON.parse(message.body);
-            console.log('Received message:', parsedMessage);
 
             if (parsedMessage.receiver_id === this.currentUserId) {
               this.messageSubject.next(parsedMessage);

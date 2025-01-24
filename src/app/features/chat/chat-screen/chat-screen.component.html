@@ -10,9 +10,9 @@
 
     <div class="message-container" #messageContainer>
         <div *ngFor="let message of messages"
-            [ngClass]="{ 'sent': message[1] === curr_user_id, 'received': message[1] !== curr_user_id }"
+            [ngClass]="{ 'sent': message.getSenderId() === curr_user_id, 'received': message.getSenderId() !== curr_user_id }"
             class="message">
-            {{ message[0] }}
+            {{ message.getMessage() }}
         </div>
     </div>
 

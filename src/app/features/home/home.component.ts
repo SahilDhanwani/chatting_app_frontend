@@ -19,4 +19,6 @@ export class HomeComponent {
   onSignupClick() {
     this.router.navigate(['/auth/signup']);
   }
+
+  
 }

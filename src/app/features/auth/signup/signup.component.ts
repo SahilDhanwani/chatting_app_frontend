@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { SignupResponse } from '../../../shared/data_packets/Responses/SignupResponse'
+import { SignupRequest } from '../../../shared/data_packets/Requests/SignupRequest'
 
 @Component({
   standalone: true,
@@ -12,7 +12,7 @@ import { SignupResponse } from '../../../shared/data_packets/Responses/SignupRes
   templateUrl: './signup.component.html',
   imports: [FormsModule, CommonModule, RouterModule, HttpClientModule],
   styleUrls: ['./signup.component.css'],
-  providers: [SignupResponse],
+  providers: [SignupRequest],
 })
 
 export class SignupComponent {
@@ -26,8 +26,8 @@ export class SignupComponent {
 
   constructor(
     private router: Router,
-    private http: HttpClient,
-    private form_data: SignupResponse) { }
+    private http: HttpClient
+  ) { }
 
   onSignupSubmit() {
     this.signUpClicked = true;
@@ -39,11 +39,13 @@ export class SignupComponent {
 
     if (this.username && this.email && this.password) {
 
-      this.form_data.setEmail(this.email);
-      this.form_data.setUsername(this.username);
-      this.form_data.setPassword(this.password);
+      const form_data = new SignupRequest();
 
-      this.http.post('http://localhost:8080/api/auth/signup', this.form_data, { withCredentials: true }).subscribe(
+      form_data.setEmail(this.email);
+      form_data.setUsername(this.username);
+      form_data.setPassword(this.password);
+
+      this.http.post('http://localhost:8080/api/auth/signup', form_data, { withCredentials: true }).subscribe(
         (response) => {
           alert('User created successfully! Please login to continue.');
           this.router.navigate(['/auth/login']);

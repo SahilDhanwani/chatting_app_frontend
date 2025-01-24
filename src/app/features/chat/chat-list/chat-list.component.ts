@@ -3,21 +3,20 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { GetUsernameRequest } from '../../../shared/data_packets/Requests/GetUsernameRequest';
-import { ActiveChatsResponse } from '../../../shared/data_packets/Requests/ActiveChatsRequest';
-import { GetAllUsernameRequest } from '../../../shared/data_packets/Requests/GetAllUsernameRequest';
+import { GetUsernameResponse } from '../../../shared/data_packets/Responses/GetUsernameResponse';
+import { ActiveChatsResponse } from '../../../shared/data_packets/Responses/ActiveChatsResponse';
+import { GetAllUsernameResponse } from '../../../shared/data_packets/Responses/GetAllUsernameResponse';
 
 @Component({
   selector: 'app-chat-list',
   imports: [FormsModule, CommonModule, HttpClientModule],
   templateUrl: './chat-list.component.html',
   styleUrls: ['./chat-list.component.css'],
-  providers: [GetUsernameRequest, ActiveChatsResponse, GetAllUsernameRequest]
+  providers: [GetUsernameResponse, ActiveChatsResponse, GetAllUsernameResponse]
 })
 
 export class ChatListComponent {
 
-  // allUsernames: string[] = [];
   ActiveChatsList: ActiveChatsResponse[] = [];
   isModalOpen = false;  // Controls whether the modal is open or closed
   searchText = '';  // Search text for filtering users
@@ -26,8 +25,8 @@ export class ChatListComponent {
     private router: Router,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
-    private curr_username: GetUsernameRequest,
-    private allUsernames: GetAllUsernameRequest
+    private curr_username: GetUsernameResponse, //
+    private allUsernames: GetAllUsernameResponse
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -37,42 +36,49 @@ export class ChatListComponent {
         this.curr_username.setUsername(response.username);
       },
       (error) => {
+        console.error(error);
         if (error.status === 403) {
           alert('Session Expired, Please login Again');
           this.router.navigate(['/auth/login']);
+          return;
         }
-        console.log(error);
       }
     )
 
-    await this.http.get('http://localhost:8080/api/activeChats', { withCredentials: true }).subscribe(
-      (response: any) => {
-        // console.log(response);
-        this.ActiveChatsList = response;
+    await this.http.get<any[]>('http://localhost:8080/api/activeChats', { withCredentials: true }).subscribe(
+      (response) => {
+        this.ActiveChatsList = response.map((temp) => {
+          const chat = new ActiveChatsResponse();
+          chat.setUsername(temp.username);
+          chat.setLastMessage(temp.lastMessage);
+          return chat;
+        });
         this.cdr.detectChanges();
       },
       (error) => {
+        console.error(error);
         if (error.status === 403) {
           alert('Session Expired, Please login Again');
           this.router.navigate(['/auth/login']);
+          return;
         }
-        console.log(error);
       }
     )
   }
 
-  openNewChat() {
+  newChat() {
     this.isModalOpen = true;
     this.http.get('http://localhost:8080/api/allUsernames', { withCredentials: true }).subscribe(
       (response: any) => {
         this.allUsernames.setUsernames(response.usernames);
       },
       (error) => {
+        console.error(error);
         if (error.status === 403) {
           alert('Session Expired, Please login Again');
           this.router.navigate(['/auth/login']);
+          return;
         }
-        // console.log(error);
       }
     )
   }
@@ -90,6 +96,6 @@ export class ChatListComponent {
 
   // Open the chat with a selected user
   openChat(select_username: string) {
-    this.router.navigate(['/chat', select_username], { state: { curr_username: this.curr_username.getUsername(), other_username: select_username } });
+    this.router.navigate(['/chat'], { state: { other_username: select_username } });
   }
 }

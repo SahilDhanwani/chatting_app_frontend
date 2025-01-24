@@ -1,4 +1,4 @@
-export class GetAllUsernameRequest {
+export class GetAllUsernameResponse {
     private usernames: string[] = [];
 
     getUsernames(): string[] {

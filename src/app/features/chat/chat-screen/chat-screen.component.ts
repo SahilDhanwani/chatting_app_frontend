@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { WebSocketService } from '../../../shared/web-socket/web-socket.service'; // Import the WebSocketService
 import { SaveMessageRequest } from '../../../shared/data_packets/Requests/SaveMessageRequest';
 import { saveLastMessageRequest } from '../../../shared/data_packets/Requests/SaveLastMessageRequest';
@@ -30,6 +30,7 @@ export class ChatScreenComponent implements OnInit {
   other_user_id: any;
   other_username: string = '';
   messages: GetMessagesResponse[] = [];
+  private messageSubscription!: Subscription;
 
   constructor(
     private router: Router,
@@ -50,7 +51,6 @@ export class ChatScreenComponent implements OnInit {
       const response: any = await lastValueFrom(
         this.http.get<number>(`http://localhost:8080/api/getIdByUsername?username=${this.other_username}`, { withCredentials: true })
       );
-      console.log('I was called inside try block')
       this.other_user_id = response.id;
     } catch (error) {
       const err = error as any;
@@ -104,13 +104,9 @@ export class ChatScreenComponent implements OnInit {
     );
 
     // Subscribe to incoming WebSocket messages
-    this.webSocketService.getMessages().subscribe((message_packet) => {
+    this.messageSubscription = this.webSocketService.getMessages().subscribe((message_packet) => {
 
-      console.log(message_packet.message);
-      console.log(message_packet.sender_id);
-      console.log(message_packet.receiver_id);
-
-      if (message_packet != null && message_packet.sender_id === this.other_user_id && message_packet.receiver_id === this.curr_user_id) {
+      if (message_packet != null && message_packet.sender_id === this.other_user_id) {
         const message = new GetMessagesResponse();
         message.setMessage(message_packet.message);
         message.setSenderId(message_packet.sender_id);
@@ -190,6 +186,12 @@ export class ChatScreenComponent implements OnInit {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     } catch (err) {
       console.error('Failed to scroll to the bottom:', err);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
     }
   }
 }

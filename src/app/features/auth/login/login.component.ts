@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginRequest } from '../../../shared/data_packets/Requests/LginRequest'
+import { environment } from '../../../shared/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent {
   password: string = '';
   loginClicked: boolean = false;
   loginError: string = '';
+  baseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,
@@ -35,7 +37,7 @@ export class LoginComponent {
       form_data.setUsername(this.username);
       form_data.setPassword(this.password);
 
-      this.http.post('http://localhost:8080/api/auth/login', form_data, { withCredentials: true }).subscribe(
+      this.http.post(`${this.baseUrl}/api/auth/login`, form_data, { withCredentials: true }).subscribe(
         (response) => {
           this.router.navigate(['/chatlist']);
         },

@@ -17,7 +17,7 @@ export class WebSocketService {
     private http: HttpClient,
     private router: Router,
   ) {
-    this.http.get('http://localhost:8080/api/validate', { withCredentials: true }).subscribe(
+    this.http.get('${this.baseUrl}/api/validate', { withCredentials: true }).subscribe(
       (response: any) => {
         this.setUpSocket(response.id);
       },
@@ -35,7 +35,7 @@ export class WebSocketService {
 
     this.client = new Client({
       webSocketFactory: () =>
-        new SockJS(`http://localhost:8080/ws/chat?id=${id}`, null, {
+        new SockJS(`${this.baseUrl}/ws/chat?id=${id}`, null, {
           withCredentials: true, // Send cookies with the request
         }),
       reconnectDelay: 5000, // Auto-reconnect on failure

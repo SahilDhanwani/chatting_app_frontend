@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SignupRequest } from '../../../shared/data_packets/Requests/SignupRequest'
+import { environment } from '../../../shared/environment';
 
 @Component({
   standalone: true,
@@ -23,6 +24,7 @@ export class SignupComponent {
   signupError: string = '';
   signUpClicked: boolean = false;
   isPasswordMatching: boolean = true;
+  baseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,
@@ -45,13 +47,13 @@ export class SignupComponent {
       form_data.setUsername(this.username);
       form_data.setPassword(this.password);
 
-      this.http.post('http://localhost:8080/api/auth/signup', form_data, { withCredentials: true }).subscribe(
+      this.http.post(`${this.baseUrl}/api/auth/signup`, form_data, { withCredentials: true }).subscribe(
         (response) => {
           alert('User created successfully! Please login to continue.');
           this.router.navigate(['/auth/login']);
         },
         (error) => {
-          console.error('Login error:', error);
+          console.error('Signup error:', error);
           alert('Username or Email already exists! Please try again.');
         });
     }

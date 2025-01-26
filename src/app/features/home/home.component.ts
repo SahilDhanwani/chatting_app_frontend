@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SignupRequest } from '../../shared/data_packets/Requests/SignupRequest';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginRequest } from '../../shared/data_packets/Requests/LginRequest';
+import { environment } from '../../shared/environment';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import { LoginRequest } from '../../shared/data_packets/Requests/LginRequest';
 })
 
 export class HomeComponent {
+
+  baseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,
@@ -42,21 +45,21 @@ export class HomeComponent {
     login_data.setUsername(username);
     login_data.setPassword('1234');
 
-    this.http.post('http://localhost:8080/api/auth/signup', signup_data, { withCredentials: true }).subscribe(
+    this.http.post(`${this.baseUrl}/api/auth/signup`, signup_data, { withCredentials: true }).subscribe(
       (response) => {
-        this.http.post('http://localhost:8080/api/auth/login', login_data, { withCredentials: true }).subscribe(
+        this.http.post(`${this.baseUrl}/api/auth/login`, login_data, { withCredentials: true }).subscribe(
           (response) => {
             this.router.navigate(['/chatlist']);
           },
           (error) => {
             console.error('Login error:', error);
-            alert('Invalid username or password! Please try again.');
+            alert('Something went wrong! Please try again after some time.');
           }
         );
       },
       (error) => {
-        console.error('Login error:', error);
-        alert('Username or Email already exists! Please try again.');
+        console.error('Signup error:', error);
+        alert('Something went wrong! Please try again after some time.');
       });
   };
 }

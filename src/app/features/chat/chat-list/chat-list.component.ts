@@ -6,6 +6,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { GetUsernameResponse } from '../../../shared/data_packets/Responses/GetUsernameResponse';
 import { ActiveChatsResponse } from '../../../shared/data_packets/Responses/ActiveChatsResponse';
 import { GetAllUsernameResponse } from '../../../shared/data_packets/Responses/GetAllUsernameResponse';
+import { environment } from '../../../shared/environment';
 
 @Component({
   selector: 'app-chat-list',
@@ -20,6 +21,7 @@ export class ChatListComponent {
   ActiveChatsList: ActiveChatsResponse[] = [];
   isModalOpen = false;  // Controls whether the modal is open or closed
   searchText = '';  // Search text for filtering users
+  baseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,
@@ -31,7 +33,7 @@ export class ChatListComponent {
 
   async ngOnInit(): Promise<void> {
 
-    await this.http.get('http://localhost:8080/api/getUsername', { withCredentials: true }).subscribe(
+    await this.http.get(`${this.baseUrl}/api/getUsername`, { withCredentials: true }).subscribe(
       (response: any) => {
         this.curr_username.setUsername(response.username);
       },
@@ -45,7 +47,7 @@ export class ChatListComponent {
       }
     )
 
-    await this.http.get<any[]>('http://localhost:8080/api/activeChats', { withCredentials: true }).subscribe(
+    await this.http.get<any[]>(`${this.baseUrl}/api/activeChats`, { withCredentials: true }).subscribe(
       (response) => {
         this.ActiveChatsList = response.map((temp) => {
           const chat = new ActiveChatsResponse();
@@ -68,7 +70,7 @@ export class ChatListComponent {
 
   newChat() {
     this.isModalOpen = true;
-    this.http.get('http://localhost:8080/api/allUsernames', { withCredentials: true }).subscribe(
+    this.http.get(`${this.baseUrl}/api/allUsernames`, { withCredentials: true }).subscribe(
       (response: any) => {
         this.allUsernames.setUsernames(response.usernames);
       },

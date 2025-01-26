@@ -8,7 +8,8 @@ import { WebSocketService } from '../../../shared/web-socket/web-socket.service'
 import { SaveMessageRequest } from '../../../shared/data_packets/Requests/SaveMessageRequest';
 import { saveLastMessageRequest } from '../../../shared/data_packets/Requests/SaveLastMessageRequest';
 import { GetMessagesResponse } from '../../../shared/data_packets/Responses/GetMessagesResponse';
-import { WebSocketMessage } from '../../../shared/data_packets/WebSocketMessage';
+import { WebSocketMessage } from '../../../shared/data_packets/Requests/WebSocketMessage';
+import { environment } from '../../../shared/environment';
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',
@@ -31,6 +32,7 @@ export class ChatScreenComponent implements OnInit {
   other_username: string = '';
   messages: GetMessagesResponse[] = [];
   private messageSubscription!: Subscription;
+  private baseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,
@@ -49,7 +51,7 @@ export class ChatScreenComponent implements OnInit {
 
     try {
       const response: any = await lastValueFrom(
-        this.http.get<number>(`http://localhost:8080/api/getIdByUsername?username=${this.other_username}`, { withCredentials: true })
+        this.http.get<number>(`${this.baseUrl}/api/getIdByUsername?username=${this.other_username}`, { withCredentials: true })
       );
       this.other_user_id = response.id;
     } catch (error) {
@@ -65,7 +67,7 @@ export class ChatScreenComponent implements OnInit {
 
     try {
       const response: any = await lastValueFrom(
-        this.http.get<number>(`http://localhost:8080/api/getId`, { withCredentials: true })
+        this.http.get<number>(`${this.baseUrl}/api/getId`, { withCredentials: true })
       );
       this.curr_user_id = response.id;
     } catch (error) {
@@ -82,7 +84,7 @@ export class ChatScreenComponent implements OnInit {
     this.webSocketService.setCurrentUserId(this.curr_user_id);
 
     // Fetch initial messages from the database
-    this.http.get<any[]>(`http://localhost:8080/api/getMessages?user2=${this.other_user_id}`, { withCredentials: true }).subscribe(
+    this.http.get<any[]>(`${this.baseUrl}/api/getMessages?user2=${this.other_user_id}`, { withCredentials: true }).subscribe(
       (response) => {
         this.messages = response.map((msg) => {
           const message = new GetMessagesResponse();
@@ -94,12 +96,12 @@ export class ChatScreenComponent implements OnInit {
         this.scrollToBottom();
       },
       (error) => {
+        console.error('Error fetching messages:', error);
         if (error.status === 403) {
           alert('Session Expired, Please login Again');
           this.router.navigate(['/auth/login']);
           return;
         }
-        console.error('Error fetching messages:', error);
       }
     );
 
@@ -144,14 +146,14 @@ export class ChatScreenComponent implements OnInit {
       this.SaveMessageRequest.setReceiver_id(this.other_user_id);
       this.SaveMessageRequest.setTimestamp(new Date().toISOString());
       // Send message to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveMessage', this.SaveMessageRequest, { withCredentials: true }).subscribe(
+      this.http.post(`${this.baseUrl}/api/saveMessage`, this.SaveMessageRequest, { withCredentials: true }).subscribe(
         (Response) => { },
         (error) => {
+          console.error('Error sending message:', error);
           if (error.status === 403) {
             alert('Session Expired, Please login Again');
             this.router.navigate(['/auth/login']);
           }
-          console.error('Error sending message:', error);
         }
       );
 
@@ -160,14 +162,14 @@ export class ChatScreenComponent implements OnInit {
       this.SaveLastMessageRequest.setLastMessage(this.messageInput);
 
       // Send last message as sender to backend to save it in the database
-      this.http.post('http://localhost:8080/api/saveLastMessage', this.SaveLastMessageRequest, { withCredentials: true }).subscribe(
+      this.http.post(`${this.baseUrl}/api/saveLastMessage`, this.SaveLastMessageRequest, { withCredentials: true }).subscribe(
         (Response) => { },
         (error) => {
+          console.error('Error sending message:', error);
           if (error.status === 403) {
             alert('Session Expired, Please login Again');
             this.router.navigate(['/auth/login']);
           }
-          console.error('Error sending message:', error);
         }
       );
 

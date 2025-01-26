@@ -4,6 +4,7 @@ import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class WebSocketService {
   private client!: Client;
   private messageSubject: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   private currentUserId: number | null = null;
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(
     private http: HttpClient,

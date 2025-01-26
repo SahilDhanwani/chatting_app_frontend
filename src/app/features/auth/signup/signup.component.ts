@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SignupRequest } from '../../../shared/data_packets/Requests/SignupRequest'
-import { environment } from '../../../shared/environment';
+import { environment } from '../../../shared/environments/environment';
 
 @Component({
   standalone: true,

@@ -4,7 +4,7 @@ import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { environment } from '../environment';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',

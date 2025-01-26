@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginRequest } from '../../../shared/data_packets/Requests/LginRequest'
-import { environment } from '../../../shared/environment';
+import { environment } from '../../../shared/environments/environment';
 
 @Component({
   selector: 'app-login',

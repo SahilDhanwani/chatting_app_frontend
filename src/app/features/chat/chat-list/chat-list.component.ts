@@ -6,7 +6,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { GetUsernameResponse } from '../../../shared/data_packets/Responses/GetUsernameResponse';
 import { ActiveChatsResponse } from '../../../shared/data_packets/Responses/ActiveChatsResponse';
 import { GetAllUsernameResponse } from '../../../shared/data_packets/Responses/GetAllUsernameResponse';
-import { environment } from '../../../shared/environment';
+import { environment } from '../../../shared/environments/environment';
 
 @Component({
   selector: 'app-chat-list',

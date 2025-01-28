@@ -19,7 +19,7 @@ export class WebSocketService {
     private http: HttpClient,
     private router: Router,
   ) {
-    this.http.get('${this.baseUrl}/api/validate', { withCredentials: true }).subscribe(
+    this.http.get(`${this.baseUrl}/api/validate`, { withCredentials: true }).subscribe(
       (response: any) => {
         this.setUpSocket(response.id);
       },

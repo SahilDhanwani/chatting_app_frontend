@@ -53,6 +53,7 @@ export class ChatScreenComponent implements OnInit {
       const response: any = await lastValueFrom(
         this.http.get<number>(`${this.baseUrl}/api/getIdByUsername?username=${this.other_username}`, { withCredentials: true })
       );
+      console.log('response : ', response);
       this.other_user_id = response.id;
     } catch (error) {
       const err = error as any;

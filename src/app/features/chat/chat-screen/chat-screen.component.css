@@ -3,9 +3,10 @@
 .chat-screen {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    height: calc(100vh - env(safe-area-inset-bottom));
-    /* For mobile, take full height, minus bottom inset */
+    min-height: 100dvh;
+    /* Preferred height if supported */
+    min-height: var(--fallback-height, 100vh);
+    /* Fallback if dvh is unsupported */
     background: linear-gradient(to bottom, #4e4376, #2b5876);
     color: white;
     animation: fadeIn 1s ease-out;
@@ -113,7 +114,6 @@
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.1);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
-    position: sticky;
     gap: 10px;
 }
 
@@ -173,11 +173,6 @@ button:hover {
 
 /* Mobile Responsive */
 @media (max-width: 600px) {
-    .chat-screen {
-        height: calc(100vh - env(safe-area-inset-bottom));
-        /* Adjust for address bar */
-    }
-
     .header-avatar {
         width: 40px;
         height: 40px;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -35,6 +35,7 @@ export class ChatScreenComponent implements OnInit {
   private baseUrl: string = environment.apiBaseUrl;
 
   constructor(
+    private renderer: Renderer2,
     private router: Router,
     private http: HttpClient,
     private webSocketService: WebSocketService,
@@ -44,7 +45,19 @@ export class ChatScreenComponent implements OnInit {
     private WebSocketMessage: WebSocketMessage
   ) { }
 
+  setHeight() {
+    const fallbackHeight = window.innerHeight;
+    this.renderer.setStyle(document.documentElement, '--fallback-height', `${fallbackHeight}px`);
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.setHeight();
+  }
+
   async ngOnInit() {
+
+    this.setHeight();
 
     const state = window.history.state;
     this.other_username = state.other_username;

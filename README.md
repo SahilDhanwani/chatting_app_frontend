@@ -2,8 +2,12 @@
 
 ChattingAppFrontend is a web-based chat application built using Angular. It provides a user-friendly interface for real-time messaging, allowing users to communicate seamlessly. The application leverages modern web technologies to ensure a responsive and efficient user experience.
 
-### Features
+### Live Demo
 
+- **Live Demo**: The project is live at [www.chat-zone.tech](http://www.chat-zone.tech).
+
+### Features
+- **Guest Login**: Supports guest login functionality for quick access.
 - **Real-time Messaging**: Send and receive messages instantly.
 - **User Authentication**: Secure login and registration system.
 - **Responsive Design**: Optimized for both desktop and mobile devices.

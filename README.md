@@ -37,7 +37,7 @@ After installing the dependencies, you can start the development server as descr
 
 ### Backend
 
-The backend for this project is built using Spring Boot. You can find the backend repository [here](https://github.com/SahilDhanwani/ChattingApplication).
+The backend for this project is built using Spring Boot. You can find the backend repository [here](https://github.com/SahilDhanwani/chatting_app_backend).
 
 ### Contributing
 

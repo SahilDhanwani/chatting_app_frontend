@@ -5,7 +5,6 @@ import { SignupRequest } from '../../shared/data_packets/Requests/SignupRequest'
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginRequest } from '../../shared/data_packets/Requests/LginRequest';
 import { environment } from '../../shared/environments/environment';
-
 @Component({
   selector: 'app-home',
   standalone: true,

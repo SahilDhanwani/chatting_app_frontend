@@ -1,0 +1,22 @@
+<div class="container">
+    <h2>سلام Sahil — Take photo & add label</h2>
+
+    <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" />
+
+    <img *ngIf="previewUrl" [src]="previewUrl" alt="preview" class="preview">
+
+    <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
+    <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)">
+    <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
+
+    <label class="small">
+        <input type="radio" name="pos" value="below" [(ngModel)]="pos"> Text below photo
+        <input type="radio" name="pos" value="above" [(ngModel)]="pos"> Text above photo
+    </label>
+
+    <button (click)="generateImage()" [disabled]="isLoading">
+        {{ isLoading ? 'Processing…' : 'Generate & Download' }}
+    </button>
+
+    <p class="small">Tip: Use the Share button on modern phones to send directly to WhatsApp.</p>
+</div>

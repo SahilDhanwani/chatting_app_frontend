@@ -1,0 +1,25 @@
+.container {
+  font-family: Arial, sans-serif;
+  padding: 16px;
+  max-width: 600px;
+  margin: auto;
+}
+input, textarea, button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.preview {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 8px 0;
+}
+.small {
+  font-size: 0.9rem;
+  color: #555;
+}
+button[disabled] {
+  opacity: 0.6;
+}

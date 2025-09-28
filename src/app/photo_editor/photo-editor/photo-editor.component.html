@@ -1,22 +1,28 @@
-<div class="container">
-    <h2>سلام Sahil — Take photo & add label</h2>
+<div class="sf-container">
+    <header class="sf-header">
+        <h1 class="sf-title">Sai Fashions</h1>
+        <p class="sf-subtitle">Quickly click & create product label</p>
+    </header>
 
-    <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" />
+    <!-- Camera input hidden but clickable through big camera button -->
+    <div class="sf-camera">
+        <button class="sf-camera-btn" (click)="cameraInput.click()">📸 Take Photo</button>
+        <input #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" hidden>
+    </div>
 
-    <img *ngIf="previewUrl" [src]="previewUrl" alt="preview" class="preview">
+    <img *ngIf="previewUrl" [src]="previewUrl" alt="preview" class="sf-preview">
 
-    <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
-    <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)">
-    <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
+    <div class="sf-form">
+        <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
+        <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)">
+        <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
 
-    <label class="small">
-        <input type="radio" name="pos" value="below" [(ngModel)]="pos"> Text below photo
-        <input type="radio" name="pos" value="above" [(ngModel)]="pos"> Text above photo
-    </label>
+        <button class="sf-generate-btn" (click)="generateImage()" [disabled]="isLoading">
+            {{ isLoading ? 'Processing…' : 'Generate & Download' }}
+        </button>
+    </div>
 
-    <button (click)="generateImage()" [disabled]="isLoading">
-        {{ isLoading ? 'Processing…' : 'Generate & Download' }}
-    </button>
-
-    <p class="small">Tip: Use the Share button on modern phones to send directly to WhatsApp.</p>
+    <footer class="sf-footer">
+        <p>Developed By: Sahil Dhanwani</p>
+    </footer>
 </div>

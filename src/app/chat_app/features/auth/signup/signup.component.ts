@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SignupRequest } from '../../../shared/data_packets/Requests/SignupRequest'
-import { environment } from '../../../shared/environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   standalone: true,
@@ -24,7 +24,7 @@ export class SignupComponent {
   signupError: string = '';
   signUpClicked: boolean = false;
   isPasswordMatching: boolean = true;
-  baseUrl: string = environment.apiBaseUrl;
+  baseUrl: string = environment.ChatAppAPIBaseURL;
 
   constructor(
     private router: Router,

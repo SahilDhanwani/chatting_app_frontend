@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModel, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   standalone: true,
@@ -14,19 +15,25 @@ import { CommonModule } from '@angular/common';
     HttpClientModule
   ]
 })
-
 export class PhotoEditorComponent {
 
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
+
   price = '';
   size = '';
   desc = '';
-  pos: 'above' | 'below' = 'below';
   isLoading = false;
+  baseUrl: string = environment.PhotoEditorAPIBaseURL;
 
   constructor(private http: HttpClient) { }
 
+  // Triggered when user clicks "📸 Take Photo"
+  onCameraClick(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  // Fired after photo is captured
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -40,10 +47,11 @@ export class PhotoEditorComponent {
 
   async generateImage(): Promise<void> {
     if (!this.selectedFile) {
-      alert('Please take/select a photo');
+      alert('Please take a photo first');
       return;
     }
 
+    // Join all non-empty fields
     const text = [this.price, this.size, this.desc]
       .filter(Boolean)
       .join(' • ');
@@ -51,26 +59,27 @@ export class PhotoEditorComponent {
     const fd = new FormData();
     fd.append('photo', this.selectedFile);
     fd.append('text', text);
-    fd.append('pos', this.pos);
+    fd.append('pos', 'below');  // fixed: text always below image
 
     this.isLoading = true;
 
-    this.http.post('/api/generate', fd, { responseType: 'blob' })
+    this.http.post(`${this.baseUrl}/api/generate`, fd, { responseType: 'blob' })
       .subscribe({
         next: async (blob) => {
           this.isLoading = false;
           const file = new File([blob], 'product-label.jpg', { type: blob.type });
 
-          // Web Share API first
+          // Try native Web Share first
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
-              await navigator.share({ files: [file], title: 'Product', text });
+              await navigator.share({ files: [file], title: 'Sai Fashions Product', text });
               return;
             } catch {
-              // Fallback to download
+              // if share is cancelled or not supported, fall back to download
             }
           }
 
+          // Fallback: auto-download
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;

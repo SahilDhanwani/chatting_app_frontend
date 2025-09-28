@@ -9,7 +9,7 @@ import { SaveMessageRequest } from '../../../shared/data_packets/Requests/SaveMe
 import { saveLastMessageRequest } from '../../../shared/data_packets/Requests/SaveLastMessageRequest';
 import { GetMessagesResponse } from '../../../shared/data_packets/Responses/GetMessagesResponse';
 import { WebSocketMessage } from '../../../shared/data_packets/Requests/WebSocketMessage';
-import { environment } from '../../../shared/environments/environment';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-chat-screen',
   templateUrl: './chat-screen.component.html',
@@ -32,7 +32,7 @@ export class ChatScreenComponent implements OnInit {
   other_username: string = '';
   messages: GetMessagesResponse[] = [];
   private messageSubscription!: Subscription;
-  private baseUrl: string = environment.apiBaseUrl;
+  private baseUrl: string = environment.ChatAppAPIBaseURL;
 
   constructor(
     private renderer: Renderer2,

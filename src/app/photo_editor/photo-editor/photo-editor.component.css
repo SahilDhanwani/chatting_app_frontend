@@ -1,25 +1,106 @@
-.container {
-  font-family: Arial, sans-serif;
-  padding: 16px;
-  max-width: 600px;
-  margin: auto;
+/* Base container */
+.sf-container {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  max-width: 420px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-input, textarea, button {
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  box-sizing: border-box;
+
+/* Header */
+.sf-header {
+  background: linear-gradient(135deg,#8e2de2,#4a00e0);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 1rem;
 }
-.preview {
+.sf-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+.sf-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Camera */
+.sf-camera {
+  text-align: center;
+  padding: 1rem;
+}
+.sf-camera-btn {
+  background: #4a00e0;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.sf-camera-btn:hover {
+  background: #5e22e3;
+}
+
+/* Preview */
+.sf-preview {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 8px 0;
+  margin: 1rem auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
-.small {
-  font-size: 0.9rem;
-  color: #555;
+
+/* Form */
+.sf-form {
+  padding: 1rem 1.5rem;
 }
-button[disabled] {
+.sf-form input,
+.sf-form textarea {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+}
+.sf-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.sf-generate-btn {
+  background: #4a00e0;
+  color: #fff;
+  font-size: 1.1rem;
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.sf-generate-btn:hover {
+  background: #5e22e3;
+}
+.sf-generate-btn[disabled] {
   opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.sf-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  padding: 0.75rem 1rem 1.5rem;
 }

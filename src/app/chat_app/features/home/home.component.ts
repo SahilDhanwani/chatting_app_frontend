@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { SignupRequest } from '../../shared/data_packets/Requests/SignupRequest';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginRequest } from '../../shared/data_packets/Requests/LginRequest';
-import { environment } from '../../shared/environments/environment';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -15,7 +15,7 @@ import { environment } from '../../shared/environments/environment';
 
 export class HomeComponent {
 
-  baseUrl: string = environment.apiBaseUrl;
+  baseUrl: string = environment.ChatAppAPIBaseURL;
 
   constructor(
     private router: Router,

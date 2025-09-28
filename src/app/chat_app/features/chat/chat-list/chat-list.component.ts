@@ -6,7 +6,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { GetUsernameResponse } from '../../../shared/data_packets/Responses/GetUsernameResponse';
 import { ActiveChatsResponse } from '../../../shared/data_packets/Responses/ActiveChatsResponse';
 import { GetAllUsernameResponse } from '../../../shared/data_packets/Responses/GetAllUsernameResponse';
-import { environment } from '../../../shared/environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-chat-list',
@@ -21,7 +21,7 @@ export class ChatListComponent {
   ActiveChatsList: ActiveChatsResponse[] = [];
   isModalOpen = false;  // Controls whether the modal is open or closed
   searchText = '';  // Search text for filtering users
-  baseUrl: string = environment.apiBaseUrl;
+  baseUrl: string = environment.ChatAppAPIBaseURL;
 
   constructor(
     private router: Router,

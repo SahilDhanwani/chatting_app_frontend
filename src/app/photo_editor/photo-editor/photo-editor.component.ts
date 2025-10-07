@@ -20,11 +20,12 @@ export class PhotoEditorComponent {
   desc = '';
   isLoading = false;
   baseUrl: string = environment.PhotoEditorAPIBaseURL;
+  sequence = 1;
 
   availableSizes: string[] = [
-    '0 X 0', '16 X 18', '20 X 24', '26 X 30', '20 X 30',
-    '32 X 34', 'S', 'M', 'L', 'XL', 'XXL', '2 X 7',
-    '5 X 10', '32 X 40', '28 X 32', '32 X 36'
+    '0X0', '16X18', '20X24', '26X30', '20X30',
+    '32X34', 'S', 'M', 'L', 'XL', 'XXL', '2X7',
+    '5X10', '32X40', '28X32', '32X36', 'FREE SIZE'
   ];
 
   filteredSizes: string[] = [];
@@ -67,26 +68,29 @@ export class PhotoEditorComponent {
   async generateImage(): Promise<void> {
     if (!this.selectedFile) { alert('Please take a photo first'); return; }
 
-    const text = [this.price, this.size, this.desc].filter(Boolean).join(' • ');
-
     const fd = new FormData();
     fd.append('photo', this.selectedFile);
-    fd.append('text', text);
-    fd.append('pos', 'below');
+    fd.append('desc', this.desc);
+    fd.append('text', this.size + " ---- ₹" + this.price + "/-");
+    fd.append('pos', 'bottom');
 
     this.isLoading = true;
     this.http.post(`${this.baseUrl}/api/generate`, fd, { responseType: 'blob' })
       .subscribe({
         next: (blob) => {
           this.isLoading = false;
+          // Filename format: desc_size_sequence
+          const safeDesc = this.desc.replace(/\s+/g, '_') || 'no-desc';
+          const safeSize = this.size.replace(/\s+/g, '_') || 'no-size';
+          const fileName = `${safeDesc}_${safeSize}_${this.sequence++}.jpg`;
+
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'product-label.jpg';
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
 
-          // Reset only the photo
           this.previewUrl = null;
           this.selectedFile = null;
         },

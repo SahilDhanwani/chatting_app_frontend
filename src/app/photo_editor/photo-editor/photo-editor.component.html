@@ -1,86 +1,50 @@
 <div class="sf-container">
-  <!-- Header -->
   <header class="sf-header">
     <h1 class="sf-title">Sai Fashions</h1>
     <p class="sf-subtitle">Quickly click & create product label</p>
   </header>
 
-  <!-- Camera input -->
+  <!-- Camera -->
   <div class="sf-camera">
     <button class="sf-camera-btn" (click)="onCameraClick(cameraInput)">📸 Take Photo</button>
-    <input
-      #cameraInput
-      type="file"
-      accept="image/*"
-      capture="environment"
-      (change)="onFileSelected($event)"
-      hidden
-    >
+    <input #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" hidden>
   </div>
 
-  <!-- Form for details -->
-  <div class="sf-form">
-    <!-- Price -->
-    <input
-      [(ngModel)]="price"
-      placeholder="Price (e.g. ₹499)"
-    >
+  <!-- Custom Cropper -->
+  <div *ngIf="previewUrl && !cropConfirmed" class="crop-container" (mousedown)="startCrop($event)" (mousemove)="moveCrop($event)" (mouseup)="endCrop()">
+    <img [src]="previewUrl" class="crop-image" #imageRef (load)="onImageLoad(imageRef)">
+    <div *ngIf="isDragging || cropBoxSet" class="crop-box" 
+         [style.left.px]="cropBox.left" [style.top.px]="cropBox.top" 
+         [style.width.px]="cropBox.width" [style.height.px]="cropBox.height"></div>
+  </div>
 
-    <!-- Size with autocomplete -->
+  <div *ngIf="previewUrl && !cropConfirmed" class="sf-cropper-btns">
+    <button class="sf-generate-btn" (click)="confirmCrop()">✅ Confirm Crop</button>
+    <button class="sf-generate-btn" (click)="resetCrop()" style="margin-left: 0.5rem;">🔄 Reset Crop</button>
+  </div>
+
+  <!-- Cropped Preview -->
+  <img *ngIf="cropConfirmed && croppedPreviewUrl" [src]="croppedPreviewUrl" alt="preview" class="sf-preview">
+
+  <!-- Form -->
+  <div class="sf-form">
+    <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
     <div class="sf-autocomplete" (mouseleave)="hideSuggestions()">
-      <input
-        [(ngModel)]="size"
-        placeholder="Size (e.g. M/L/XL)"
-        (input)="filterSizes()"
-        (focus)="filterSizes()"
-        autocomplete="off"
-      >
+      <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)"
+             (input)="filterSizes()" (focus)="filterSizes()" autocomplete="off">
       <ul *ngIf="showSuggestions && filteredSizes.length > 0">
         <li *ngFor="let option of filteredSizes" (mousedown)="selectSize(option)">
           {{ option }}
         </li>
       </ul>
     </div>
+    <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
 
-    <!-- Description -->
-    <textarea
-      [(ngModel)]="desc"
-      rows="2"
-      placeholder="One-line description (e.g. Cotton kurta)"
-    ></textarea>
-
-    <!-- Generate button -->
-    <button
-      class="sf-generate-btn"
-      (click)="generateImage()"
-      [disabled]="isLoading"
-    >
+    <button class="sf-generate-btn" (click)="generateImage()" [disabled]="isLoading">
       {{ isLoading ? 'Processing…' : 'Generate & Download' }}
     </button>
   </div>
 
-  <!-- Image Cropper Section -->
-  <div *ngIf="imageChangedEvent && !croppedImage" class="sf-cropper-box">
-    <image-cropper
-      [imageChangedEvent]="imageChangedEvent"
-      [maintainAspectRatio]="false"
-      format="png"
-      (imageCropped)="onImageCropped($event)">
-    </image-cropper>
-
-    <button class="sf-generate-btn" (click)="confirmCrop()">✅ Confirm Crop</button>
-    <button class="sf-generate-btn" (click)="cancelCrop()">❌ Cancel</button>
-  </div>
-
-  <!-- Cropped Preview -->
-  <img
-    *ngIf="croppedImage"
-    [src]="croppedImage"
-    alt="Cropped preview"
-    class="sf-preview"
-  >
-
-  <!-- Footer -->
   <footer class="sf-footer">
     <p>Developed By: Sahil Dhanwani</p>
   </footer>

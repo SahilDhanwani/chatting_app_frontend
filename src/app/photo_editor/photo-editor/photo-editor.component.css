@@ -149,3 +149,22 @@ image-cropper {
   display: block;
   margin-bottom: 1rem;
 }
+
+.crop-container {
+  position: relative;
+  max-width: 100%;
+  display: inline-block;
+}
+
+.crop-image {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  display: block;
+}
+
+.crop-box {
+  position: absolute;
+  border: 2px dashed #4a00e0;
+  background: rgba(74, 0, 224, 0.1);
+  pointer-events: none;
+}

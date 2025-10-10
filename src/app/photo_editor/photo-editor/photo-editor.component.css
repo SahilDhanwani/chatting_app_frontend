@@ -1,3 +1,4 @@
+/* === Container & Header === */
 .sf-container {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   max-width: 420px;
@@ -6,7 +7,6 @@
   border-radius: 1.2rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
   overflow: visible;
-  /* allow dropdown to escape container */
   display: flex;
   flex-direction: column;
 }
@@ -16,6 +16,7 @@
   color: #fff;
   text-align: center;
   padding: 1.5rem 1rem;
+  border-radius: 1.2rem 1.2rem 0 0;
 }
 
 .sf-title {
@@ -30,35 +31,100 @@
   opacity: 0.9;
 }
 
+/* === Camera Button === */
 .sf-camera {
   text-align: center;
   padding: 1rem;
 }
 
 .sf-camera-btn {
-  background: #4a00e0;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
   color: #fff;
   font-size: 1.1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.6rem;
   border: none;
   border-radius: 2rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(106, 17, 203, 0.3);
 }
 
 .sf-camera-btn:hover {
-  background: #5e22e3;
+  transform: translateY(-1px);
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
+  box-shadow: 0 4px 14px rgba(37, 117, 252, 0.4);
 }
 
-.sf-preview {
-  max-width: 100%;
+/* === Image Preview & Crop === */
+.crop-container {
+  position: relative;
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: #f8f8ff;
+  border-radius: 0.8rem;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.crop-image {
+  width: 100%;
   height: auto;
   display: block;
-  margin: 1rem auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 0.8rem;
+  user-select: none;
 }
 
+.crop-box {
+  position: absolute;
+  border: 3px solid #000;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+/* === Cropper Buttons === */
+.sf-cropper-btns {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.sf-cropper-btns button {
+  flex: 1;
+}
+
+/* === Universal Button Styles === */
+.sf-generate-btn {
+  background: linear-gradient(90deg, #4a00e0, #8e2de2);
+  color: #fff;
+  font-size: 1.05rem;
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(74, 0, 224, 0.25);
+}
+
+.sf-generate-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(90deg, #8e2de2, #4a00e0);
+  box-shadow: 0 4px 12px rgba(142, 45, 226, 0.4);
+}
+
+.sf-generate-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* === Form === */
 .sf-form {
   padding: 1rem 1.5rem;
 }
@@ -66,12 +132,20 @@
 .sf-form input,
 .sf-form textarea {
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 0.6rem 0;
   padding: 0.75rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
   box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.sf-form input:focus,
+.sf-form textarea:focus {
+  outline: none;
+  border-color: #6a11cb;
+  box-shadow: 0 0 6px rgba(106, 17, 203, 0.2);
 }
 
 .sf-form textarea {
@@ -79,6 +153,7 @@
   resize: vertical;
 }
 
+/* === Autocomplete === */
 .sf-autocomplete {
   position: relative;
 }
@@ -97,7 +172,6 @@
   padding: 0;
   list-style: none;
   z-index: 999;
-  /* higher than container */
 }
 
 .sf-autocomplete li {
@@ -109,62 +183,20 @@
   background: #f0f0f0;
 }
 
-.sf-generate-btn {
-  background: #4a00e0;
-  color: #fff;
-  font-size: 1.1rem;
-  margin-top: 0.75rem;
-  width: 100%;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background 0.3s;
+/* === Preview === */
+.sf-preview {
+  max-width: 95%;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 0.8rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
-.sf-generate-btn:hover {
-  background: #5e22e3;
-}
-
-.sf-generate-btn[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* === Footer === */
 .sf-footer {
   text-align: center;
   font-size: 0.85rem;
-  color: #666;
+  color: #555;
   padding: 0.75rem 1rem 1.5rem;
-}
-
-.sf-cropper-box {
-  text-align: center;
-  margin: 1rem auto;
-}
-
-image-cropper {
-  width: 100%;
-  height: 300px;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.crop-container {
-  position: relative;
-  max-width: 100%;
-  display: inline-block;
-}
-
-.crop-image {
-  max-width: 100%;
-  border-radius: 0.5rem;
-  display: block;
-}
-
-.crop-box {
-  position: absolute;
-  border: 2px dashed #4a00e0;
-  background: rgba(74, 0, 224, 0.1);
-  pointer-events: none;
+  border-top: 1px solid #eee;
 }

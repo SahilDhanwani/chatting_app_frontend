@@ -36,7 +36,10 @@ export class PhotoEditorComponent {
   baseUrl: string = environment.PhotoEditorAPIBaseURL;
   sequence = 1;
 
-  availableSizes: string[] = ['S', 'M', 'L', 'XL', 'XXL', 'FREE SIZE'];
+  availableSizes: string[] = [
+    '0X0', '16X18', '20X24', '26X30', '20X30',
+    '32X34', 'S', 'M', 'L', 'XL', 'XXL', '2X7',
+    '5X10', '32X40', '28X32', '32X36', 'FREE SIZE'];
   filteredSizes: string[] = [];
   showSuggestions = false;
 

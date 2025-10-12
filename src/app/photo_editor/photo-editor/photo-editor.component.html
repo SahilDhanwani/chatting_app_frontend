@@ -1,51 +1,61 @@
 <div class="sf-container">
-  <header class="sf-header">
-    <h1 class="sf-title">Sai Fashions</h1>
-    <p class="sf-subtitle">Quickly click & create product label</p>
-  </header>
+    <header class="sf-header">
+        <h1 class="sf-title">Sai Fashions</h1>
+        <p class="sf-subtitle">Quickly click & create product label</p>
+    </header>
 
-  <!-- Camera -->
-  <div class="sf-camera">
-    <button class="sf-camera-btn" (click)="onCameraClick(cameraInput)">📸 Take Photo</button>
-    <input #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" hidden>
-  </div>
-
-  <!-- Custom Cropper -->
-  <div *ngIf="previewUrl && !cropConfirmed" class="crop-container" (mousedown)="startCrop($event)" (mousemove)="moveCrop($event)" (mouseup)="endCrop()">
-    <img [src]="previewUrl" class="crop-image" #imageRef (load)="onImageLoad(imageRef)">
-    <div *ngIf="isDragging || cropBoxSet" class="crop-box" 
-         [style.left.px]="cropBox.left" [style.top.px]="cropBox.top" 
-         [style.width.px]="cropBox.width" [style.height.px]="cropBox.height"></div>
-  </div>
-
-  <div *ngIf="previewUrl && !cropConfirmed" class="sf-cropper-btns">
-    <button class="sf-generate-btn" (click)="confirmCrop()">✅ Confirm Crop</button>
-    <button class="sf-generate-btn" (click)="resetCrop()" style="margin-left: 0.5rem;">🔄 Reset Crop</button>
-  </div>
-
-  <!-- Cropped Preview -->
-  <img *ngIf="cropConfirmed && croppedPreviewUrl" [src]="croppedPreviewUrl" alt="preview" class="sf-preview">
-
-  <!-- Form -->
-  <div class="sf-form">
-    <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
-    <div class="sf-autocomplete" (mouseleave)="hideSuggestions()">
-      <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)"
-             (input)="filterSizes()" (focus)="filterSizes()" autocomplete="off">
-      <ul *ngIf="showSuggestions && filteredSizes.length > 0">
-        <li *ngFor="let option of filteredSizes" (mousedown)="selectSize(option)">
-          {{ option }}
-        </li>
-      </ul>
+    <!-- Camera -->
+    <div class="sf-camera">
+        <button class="sf-camera-btn" (click)="onCameraClick(cameraInput)">📸 Take Photo</button>
+        <input #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" hidden>
     </div>
-    <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
 
-    <button class="sf-generate-btn" (click)="generateImage()" [disabled]="isLoading">
-      {{ isLoading ? 'Processing…' : 'Generate & Download' }}
-    </button>
-  </div>
+    <!-- Custom Cropper -->
+    <div *ngIf="previewUrl && !cropConfirmed" class="crop-container" (mousedown)="startCrop($event)"
+        (mousemove)="moveCrop($event)" (mouseup)="endCrop()" (touchstart)="startCrop($event)"
+        (touchmove)="moveCrop($event)" (touchend)="endCrop()">
+        <img [src]="previewUrl" class="crop-image" #imageRef (load)="onImageLoad(imageRef)">
 
-  <footer class="sf-footer">
-    <p>Developed By: Sahil Dhanwani v1.2</p>
-  </footer>
+        <!-- Crop Box -->
+        <div *ngIf="isDragging || cropBoxSet" class="crop-box" [style.left.px]="cropBox.left"
+            [style.top.px]="cropBox.top" [style.width.px]="cropBox.width" [style.height.px]="cropBox.height">
+            <!-- Resize handles -->
+            <div class="handle top-left" (mousedown)="startResize($event, 'tl')"></div>
+            <div class="handle top-right" (mousedown)="startResize($event, 'tr')"></div>
+            <div class="handle bottom-left" (mousedown)="startResize($event, 'bl')"></div>
+            <div class="handle bottom-right" (mousedown)="startResize($event, 'br')"></div>
+        </div>
+    </div>
+
+    <!-- Cropper Buttons -->
+    <div *ngIf="previewUrl && !cropConfirmed" class="sf-cropper-btns">
+        <button class="sf-generate-btn" (click)="confirmCrop()">✅ Confirm Crop</button>
+        <button class="sf-generate-btn" (click)="resetCrop()" style="margin-left:0.5rem;">🔄 Reset Crop</button>
+    </div>
+
+    <!-- Cropped Preview -->
+    <img *ngIf="cropConfirmed && croppedPreviewUrl" [src]="croppedPreviewUrl" alt="preview" class="sf-preview">
+
+    <!-- Form -->
+    <div class="sf-form">
+        <input [(ngModel)]="price" placeholder="Price (e.g. ₹499)">
+        <div class="sf-autocomplete" (mouseleave)="hideSuggestions()">
+            <input [(ngModel)]="size" placeholder="Size (e.g. M/L/XL)" (input)="filterSizes()" (focus)="filterSizes()"
+                autocomplete="off">
+            <ul *ngIf="showSuggestions && filteredSizes.length > 0">
+                <li *ngFor="let option of filteredSizes" (mousedown)="selectSize(option)">
+                    {{ option }}
+                </li>
+            </ul>
+        </div>
+        <textarea [(ngModel)]="desc" rows="2" placeholder="One-line description (e.g. Cotton kurta)"></textarea>
+
+        <button class="sf-generate-btn" (click)="generateImage()" [disabled]="isLoading">
+            {{ isLoading ? 'Processing…' : 'Generate & Download' }}
+        </button>
+    </div>
+
+    <footer class="sf-footer">
+        <p>Developed By: Sahil Dhanwani v2.0</p>
+    </footer>
 </div>

@@ -21,117 +21,107 @@ export class PhotoEditorComponent {
   cropConfirmed = false;
   isDragging = false;
   cropBoxSet = false;
-  startX = 0;
-  startY = 0;
+  resizeMode: 'tl' | 'tr' | 'bl' | 'br' | null = null;
+  startX = 0; startY = 0;
 
   cropBox = { left: 50, top: 50, width: 100, height: 100 };
-  imageNaturalWidth = 0;
-  imageNaturalHeight = 0;
+  imageNaturalWidth = 0; imageNaturalHeight = 0;
 
-  price = '';
-  size = '';
-  desc = '';
-  isLoading = false;
-  baseUrl: string = environment.PhotoEditorAPIBaseURL;
-  sequence = 1;
+  price = ''; size = ''; desc = ''; isLoading = false; baseUrl = environment.PhotoEditorAPIBaseURL; sequence = 1;
+  availableSizes = ['S', 'M', 'L', 'XL', 'XXL', 'FREE SIZE']; filteredSizes: string[] = []; showSuggestions = false;
 
-  availableSizes: string[] = ['S', 'M', 'L', 'XL', 'XXL', 'FREE SIZE'];
-  filteredSizes: string[] = [];
-  showSuggestions = false;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   filterSizes() {
     const value = this.size.toLowerCase();
     this.filteredSizes = this.availableSizes.filter(opt => opt.toLowerCase().includes(value));
     this.showSuggestions = this.filteredSizes.length > 0;
   }
-
-  selectSize(option: string) {
-    this.size = option;
-    this.showSuggestions = false;
-  }
-
-  hideSuggestions() {
-    setTimeout(() => (this.showSuggestions = false), 150);
-  }
-
-  onCameraClick(input: HTMLInputElement): void {
-    input.value = '';
-    input.click();
-  }
-
-  onFileSelected(event: Event): void {
+  selectSize(option: string) { this.size = option; this.showSuggestions = false; }
+  hideSuggestions() { setTimeout(() => this.showSuggestions = false, 150); }
+  onCameraClick(input: HTMLInputElement) { input.value = ''; input.click(); }
+  onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
     this.selectedFile = input.files[0];
-
     const reader = new FileReader();
-    reader.onload = () => {
-      this.previewUrl = reader.result;
-      this.cropConfirmed = false;
-    };
+    reader.onload = () => { this.previewUrl = reader.result; this.cropConfirmed = false; };
     reader.readAsDataURL(this.selectedFile);
   }
+  onImageLoad(image: HTMLImageElement) { this.imageNaturalWidth = image.naturalWidth; this.imageNaturalHeight = image.naturalHeight; }
 
-  onImageLoad(image: HTMLImageElement) {
-    this.imageNaturalWidth = image.naturalWidth;
-    this.imageNaturalHeight = image.naturalHeight;
-  }
-
-  startCrop(event: MouseEvent) {
+  startCrop(event: MouseEvent | TouchEvent) {
+    const e = 'touches' in event ? event.touches[0] : event;
     this.isDragging = true;
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    this.startX = event.clientX - rect.left;
-    this.startY = event.clientY - rect.top;
+    const rect = this.imageRef.nativeElement.getBoundingClientRect();
+    this.startX = e.clientX - rect.left; this.startY = e.clientY - rect.top;
   }
 
-  moveCrop(event: MouseEvent) {
-    if (!this.isDragging) return;
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    const currentX = event.clientX - rect.left;
-    const currentY = event.clientY - rect.top;
+  moveCrop(event: MouseEvent | TouchEvent) {
+    const e = 'touches' in event ? event.touches[0] : event;
+    const rect = this.imageRef.nativeElement.getBoundingClientRect();
+    const clientX = e.clientX - rect.left; const clientY = e.clientY - rect.top;
 
-    this.cropBox.left = Math.min(this.startX, currentX);
-    this.cropBox.top = Math.min(this.startY, currentY);
-    this.cropBox.width = Math.abs(currentX - this.startX);
-    this.cropBox.height = Math.abs(currentY - this.startY);
-    this.cropBoxSet = true;
+    if (this.resizeMode) {
+      switch (this.resizeMode) {
+        case 'tl':
+          this.cropBox.width += this.cropBox.left - clientX;
+          this.cropBox.height += this.cropBox.top - clientY;
+          this.cropBox.left = clientX; this.cropBox.top = clientY; break;
+        case 'tr':
+          this.cropBox.width = clientX - this.cropBox.left;
+          this.cropBox.height += this.cropBox.top - clientY;
+          this.cropBox.top = clientY; break;
+        case 'bl':
+          this.cropBox.width += this.cropBox.left - clientX;
+          this.cropBox.left = clientX;
+          this.cropBox.height = clientY - this.cropBox.top; break;
+        case 'br':
+          this.cropBox.width = clientX - this.cropBox.left;
+          this.cropBox.height = clientY - this.cropBox.top; break;
+      }
+      // keep inside bounds
+      if (this.cropBox.left < 0) this.cropBox.left = 0;
+      if (this.cropBox.top < 0) this.cropBox.top = 0;
+      const img = this.imageRef.nativeElement;
+      if (this.cropBox.left + this.cropBox.width > img.clientWidth) this.cropBox.width = img.clientWidth - this.cropBox.left;
+      if (this.cropBox.top + this.cropBox.height > img.clientHeight) this.cropBox.height = img.clientHeight - this.cropBox.top;
+      this.cropBoxSet = true;
+    } else if (this.isDragging) {
+      this.cropBox.left = clientX - this.cropBox.width / 2;
+      this.cropBox.top = clientY - this.cropBox.height / 2;
+      if (this.cropBox.left < 0) this.cropBox.left = 0;
+      if (this.cropBox.top < 0) this.cropBox.top = 0;
+      const img = this.imageRef.nativeElement;
+      if (this.cropBox.left + this.cropBox.width > img.clientWidth) this.cropBox.left = img.clientWidth - this.cropBox.width;
+      if (this.cropBox.top + this.cropBox.height > img.clientHeight) this.cropBox.top = img.clientHeight - this.cropBox.height;
+      this.cropBoxSet = true;
+    }
   }
 
-  endCrop() {
-    this.isDragging = false;
-  }
+  startResize(event: MouseEvent | TouchEvent, corner: 'tl' | 'tr' | 'bl' | 'br') { event.stopPropagation(); this.resizeMode = corner; }
+  endCrop() { this.isDragging = false; this.resizeMode = null; }
 
   confirmCrop() {
     const img = this.imageRef.nativeElement;
     const canvas = document.createElement('canvas');
     const scaleX = this.imageNaturalWidth / img.clientWidth;
     const scaleY = this.imageNaturalHeight / img.clientHeight;
-
     const sx = this.cropBox.left * scaleX;
     const sy = this.cropBox.top * scaleY;
     const sw = this.cropBox.width * scaleX;
     const sh = this.cropBox.height * scaleY;
-
-    canvas.width = sw;
-    canvas.height = sh;
+    canvas.width = sw; canvas.height = sh;
     const ctx = canvas.getContext('2d');
     ctx?.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
-
-    this.croppedPreviewUrl = canvas.toDataURL('image/jpeg');
-    this.cropConfirmed = true;
+    this.croppedPreviewUrl = canvas.toDataURL('image/jpeg'); this.cropConfirmed = true;
   }
 
-  resetCrop() {
-    this.cropBoxSet = false;
-    this.cropBox = { left: 50, top: 50, width: 100, height: 100 };
-  }
+  resetCrop() { this.cropBoxSet = false; this.cropBox = { left: 50, top: 50, width: 100, height: 100 }; }
 
-  async generateImage(): Promise<void> {
+  async generateImage() {
     const finalImage = this.croppedPreviewUrl || (this.previewUrl as string);
     if (!finalImage) { alert('Please take or crop an image first'); return; }
-
     const blob = await (await fetch(finalImage)).blob();
     const fd = new FormData();
     fd.append('photo', blob, 'cropped.jpg');
@@ -140,28 +130,18 @@ export class PhotoEditorComponent {
     fd.append('pos', 'bottom');
 
     this.isLoading = true;
-    this.http.post(`${this.baseUrl}/api/generate`, fd, { responseType: 'blob' })
-      .subscribe({
-        next: (blob) => {
-          this.isLoading = false;
-          const safeDesc = this.desc.replace(/\s+/g, '_') || 'no-desc';
-          const safeSize = this.size.replace(/\s+/g, '_') || 'no-size';
-          const fileName = `${safeDesc}_${safeSize}_${this.sequence++}.jpg`;
-
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fileName;
-          a.click();
-          window.URL.revokeObjectURL(url);
-
-          this.previewUrl = null;
-          this.selectedFile = null;
-        },
-        error: (err) => {
-          this.isLoading = false;
-          alert('Error: ' + (err.message || 'Server error'));
-        }
-      });
+    this.http.post(`${this.baseUrl}/api/generate`, fd, { responseType: 'blob' }).subscribe({
+      next: blob => {
+        this.isLoading = false;
+        const safeDesc = this.desc.replace(/\s+/g, '_') || 'no-desc';
+        const safeSize = this.size.replace(/\s+/g, '_') || 'no-size';
+        const fileName = `${safeDesc}_${safeSize}_${this.sequence++}.jpg`;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = fileName; a.click();
+        window.URL.revokeObjectURL(url);
+        this.previewUrl = null; this.selectedFile = null;
+      },
+      error: err => { this.isLoading = false; alert('Error: ' + (err.message || 'Server error')); }
+    });
   }
 }

@@ -11,26 +11,29 @@
     </div>
 
     <!-- Custom Cropper -->
-    <div *ngIf="previewUrl && !cropConfirmed" class="crop-container" (mousedown)="startCrop($event)"
-        (mousemove)="moveCrop($event)" (mouseup)="endCrop()" (touchstart)="startCrop($event)"
-        (touchmove)="moveCrop($event)" (touchend)="endCrop()">
+    <div *ngIf="previewUrl && !cropConfirmed" class="crop-container">
         <img [src]="previewUrl" class="crop-image" #imageRef (load)="onImageLoad(imageRef)">
 
         <!-- Crop Box -->
-        <div *ngIf="isDragging || cropBoxSet" class="crop-box" [style.left.px]="cropBox.left"
-            [style.top.px]="cropBox.top" [style.width.px]="cropBox.width" [style.height.px]="cropBox.height">
+        <div class="crop-box" [style.left.px]="cropBox.left" [style.top.px]="cropBox.top"
+            [style.width.px]="cropBox.width" [style.height.px]="cropBox.height" (mousedown)="startDrag($event)"
+            (touchstart)="startDrag($event)">
+
             <!-- Resize handles -->
-            <div class="handle top-left" (mousedown)="startResize($event, 'tl')"></div>
-            <div class="handle top-right" (mousedown)="startResize($event, 'tr')"></div>
-            <div class="handle bottom-left" (mousedown)="startResize($event, 'bl')"></div>
-            <div class="handle bottom-right" (mousedown)="startResize($event, 'br')"></div>
+            <div class="handle tl" (mousedown)="startResize($event,'tl')" (touchstart)="startResize($event,'tl')"></div>
+            <div class="handle tr" (mousedown)="startResize($event,'tr')" (touchstart)="startResize($event,'tr')"></div>
+            <div class="handle bl" (mousedown)="startResize($event,'bl')" (touchstart)="startResize($event,'bl')"></div>
+            <div class="handle br" (mousedown)="startResize($event,'br')" (touchstart)="startResize($event,'br')"></div>
+            <div class="handle t" (mousedown)="startResize($event,'t')" (touchstart)="startResize($event,'t')"></div>
+            <div class="handle b" (mousedown)="startResize($event,'b')" (touchstart)="startResize($event,'b')"></div>
+            <div class="handle l" (mousedown)="startResize($event,'l')" (touchstart)="startResize($event,'l')"></div>
+            <div class="handle r" (mousedown)="startResize($event,'r')" (touchstart)="startResize($event,'r')"></div>
         </div>
     </div>
 
-    <!-- Cropper Buttons -->
     <div *ngIf="previewUrl && !cropConfirmed" class="sf-cropper-btns">
         <button class="sf-generate-btn" (click)="confirmCrop()">✅ Confirm Crop</button>
-        <button class="sf-generate-btn" (click)="resetCrop()" style="margin-left:0.5rem;">🔄 Reset Crop</button>
+        <button class="sf-generate-btn" (click)="resetCrop()">🔄 Reset Crop</button>
     </div>
 
     <!-- Cropped Preview -->

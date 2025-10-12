@@ -58,65 +58,95 @@
 .crop-container {
   position: relative;
   max-width: 95%;
-  margin: 0.5rem auto;
-  background: #f8f8ff;
-  border-radius: 0.8rem;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  padding: 0;
+  /* remove any padding to align crop box exactly */
 }
 
 .crop-image {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 0.8rem;
   user-select: none;
+  margin: 0;
+  /* ensure no margin */
 }
 
 .crop-box {
   position: absolute;
-  border: 3px solid #4a00e0;
-  background: rgba(74, 0, 224, 0.15);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4) inset;
-  border-radius: 5px;
-  cursor: move;
-  pointer-events: auto;
-  z-index: 10;
+  border: 2px solid #4a00e0;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  box-sizing: border-box;
+  /* include border in width/height */
 }
 
-/* Resize Handles */
+
 .handle {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #4a00e0;
-  border: 2px solid #fff;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #4a00e0;
   border-radius: 50%;
-  z-index: 11;
+  z-index: 10;
+  touch-action: none;
 }
 
-.handle.top-left {
-  top: -6px;
-  left: -6px;
+/* Corners */
+.handle.tl {
+  top: -10px;
+  left: -10px;
   cursor: nwse-resize;
 }
 
-.handle.top-right {
-  top: -6px;
-  right: -6px;
+.handle.tr {
+  top: -10px;
+  right: -10px;
   cursor: nesw-resize;
 }
 
-.handle.bottom-left {
-  bottom: -6px;
-  left: -6px;
+.handle.bl {
+  bottom: -10px;
+  left: -10px;
   cursor: nesw-resize;
 }
 
-.handle.bottom-right {
-  bottom: -6px;
-  right: -6px;
+.handle.br {
+  bottom: -10px;
+  right: -10px;
   cursor: nwse-resize;
 }
+
+/* Edges */
+.handle.t {
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: n-resize;
+}
+
+.handle.b {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: s-resize;
+}
+
+.handle.l {
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: w-resize;
+}
+
+.handle.r {
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: e-resize;
+}
+
 
 /* Cropper Buttons */
 .sf-cropper-btns {
